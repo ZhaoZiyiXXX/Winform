@@ -292,6 +292,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "主页面";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.主页面_FormClosed);
+            this.Load += new System.EventHandler(this.主页面_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.入库.ResumeLayout(false);

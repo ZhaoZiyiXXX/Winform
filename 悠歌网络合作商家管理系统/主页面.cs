@@ -44,5 +44,10 @@ namespace 悠歌网络合作商家管理系统
                 MessageBox.Show("未找到可以启动的应用程序");
             }
         }
+
+        private void 主页面_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

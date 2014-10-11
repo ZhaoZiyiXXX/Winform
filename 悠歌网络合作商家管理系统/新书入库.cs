@@ -29,6 +29,7 @@ namespace 悠歌网络合作商家管理系统
             gdt.Columns.Add("isbn", System.Type.GetType("System.String"));
             gdt.Columns.Add("price", System.Type.GetType("System.String"));
             gdt.Columns.Add("count", System.Type.GetType("System.Int32"));
+            gdt.Columns.Add("off", System.Type.GetType("System.Double"));
             dataGridView2.DataSource = gdt.DefaultView;
         }
 
@@ -93,6 +94,14 @@ namespace 悠歌网络合作商家管理系统
                 textBox3.Focus();
                 return;
             }
+
+            if (string.IsNullOrEmpty(textBox5.Text))
+            {
+                MessageBox.Show("请输入折扣！");
+                textBox5.Focus();
+                return;
+            }
+
             try
             {
                 int index = dataGridView1.CurrentRow.Index;
@@ -139,6 +148,59 @@ namespace 悠歌网络合作商家管理系统
         private void button5_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void textBox4_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            //数字0～9所对应的keychar为48～57，小数点是46，Backspace是8，小数点是46。
+            if (((int)e.KeyChar < 48 || (int)e.KeyChar > 57) && (int)e.KeyChar != 8 && (int)e.KeyChar != 46)
+                e.Handled = true;
+
+            //小数点的处理。
+            if ((int)e.KeyChar == 46)                           //小数点
+            {
+                if (textBox4.Text.Length <= 0)
+                    e.Handled = true;   //小数点不能在第一位
+                else
+                {
+                    float f;
+                    float oldf;
+                    bool b1 = false, b2 = false;
+                    b1 = float.TryParse(textBox4.Text, out oldf);
+                    b2 = float.TryParse(textBox4.Text + e.KeyChar.ToString(), out f);
+                    if (b2 == false)
+                    {
+                        if (b1 == true)
+                            e.Handled = true;
+                        else
+                            e.Handled = false;
+                    }
+                }
+            }
+        }
+
+        private void textBox5_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            //数字0～9所对应的keychar为48～57，小数点是46，Backspace是8，小数点是46。
+            if (((int)e.KeyChar < 48 || (int)e.KeyChar > 57) && (int)e.KeyChar != 8 && (int)e.KeyChar != 46)
+                e.Handled = true;
+
+            //小数点的处理。
+            if ((int)e.KeyChar == 46)                           //小数点
+            {
+                float f;
+                float oldf;
+                bool b1 = false, b2 = false;
+                b1 = float.TryParse(textBox5.Text, out oldf);
+                b2 = float.TryParse(textBox5.Text + e.KeyChar.ToString(), out f);
+                if (b2 == false)
+                {
+                    if (b1 == true)
+                        e.Handled = true;
+                    else
+                        e.Handled = false;
+                }
+            }
         }
     }
 }
