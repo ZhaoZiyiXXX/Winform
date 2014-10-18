@@ -65,7 +65,7 @@
       <HintPath>..\..\modernUI学习\modernUI学习\bin\Debug\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\modernUI学习\modernUI学习\bin\Debug\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\YouGeWebApi\resource\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
