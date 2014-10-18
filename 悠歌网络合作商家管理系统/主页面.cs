@@ -47,7 +47,10 @@ namespace 悠歌网络合作商家管理系统
 
         private void 主页面_Load(object sender, EventArgs e)
         {
-
+            DBOperation dbo = new DBOperation();
+            string sql = "SELECT * FROM yg_local_shopinfo";
+            DataTable dt = dbo.Selectinfo(sql);
+            label2.Text = dt.Rows[0]["shopname"].ToString();
         }
     }
 }

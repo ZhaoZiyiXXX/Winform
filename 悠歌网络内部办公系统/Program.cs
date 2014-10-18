@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace DBSyncServer
+namespace 悠歌网络内部办公系统
 {
     static class Program
     {
@@ -15,7 +15,7 @@ namespace DBSyncServer
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new 登录页面());
         }
     }
 }

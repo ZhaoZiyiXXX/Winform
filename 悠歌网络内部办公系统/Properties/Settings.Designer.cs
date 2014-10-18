@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DBSyncServer.Properties
+namespace 悠歌网络内部办公系统.Properties
 {
 
 

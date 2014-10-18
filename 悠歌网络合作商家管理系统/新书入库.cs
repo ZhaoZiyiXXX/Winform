@@ -62,11 +62,9 @@ namespace 悠歌网络合作商家管理系统
         {
             string sql = "SELECT * FROM yg_jinhuoqudao";
             DataTable dt = dbo.Selectinfo(sql);
-            comboBox1.Items.Clear();
-            for (int i = 0; i < dt.Rows.Count; i++)
-            {
-                comboBox1.Items.Add(dt.Rows[i]["name"].ToString());
-            }
+            comboBox1.DisplayMember = "name";
+            comboBox1.ValueMember = "id";
+            comboBox1.DataSource = dt;
             comboBox1.SelectedIndex = 0;
         }
 
@@ -112,6 +110,7 @@ namespace 悠歌网络合作商家管理系统
                 dr["isbn"] = dataGridView1.Rows[index].Cells[5].Value.ToString();
                 dr["price"] = dataGridView1.Rows[index].Cells[4].Value.ToString();
                 dr["count"] = Convert.ToInt32(textBox3.Text);
+                dr["off"] = Convert.ToDouble(textBox5.Text );
                 gdt.Rows.Add(dr);
                 dataGridView2.DataSource = gdt.DefaultView;
             }
@@ -123,6 +122,11 @@ namespace 悠歌网络合作商家管理系统
 
         private void button2_Click(object sender, EventArgs e)
         {
+            if (dataGridView1.DisplayedRowCount(true) == 0)
+            {
+                MessageBox.Show("请先选择有效的图书信息");
+                return;
+            }
             try
             {
                 复制新图书信息 f = new 复制新图书信息();
@@ -147,7 +151,32 @@ namespace 悠歌网络合作商家管理系统
 
         private void button5_Click(object sender, EventArgs e)
         {
-
+            string sql = string.Format("INSERT INTO yg_orderinfo (datetime ,jinhuoqudao,`name`,`price`) VALUES ('{0}','{1}','{2}','{3}')",
+                label5.Text,comboBox1.SelectedValue ,textBox2.Text,textBox4.Text);
+            dbo.AddDelUpdate(sql);
+            sql = string.Format("SELECT id FROM yg_orderinfo WHERE datetime = '{0}'",label5.Text );
+            DataTable dt = dbo.Selectinfo(sql);
+            if (dt.Rows.Count != 1)
+            {
+                MessageBox.Show("订单生成过程中出现了错误!");
+                return;
+            }
+            string orderid = dt.Rows[0]["id"].ToString();
+            for (int i = 0; i < gdt.Rows.Count; i++)
+            {
+                sql = string.Format("INSERT INTO yg_orderdetail (orderid,bookid,count,off) VALUES ('{0}','{1}','{2}','{3}')",
+                    orderid,gdt.Rows[i]["id"].ToString(),gdt.Rows[i]["count"].ToString(),gdt.Rows[i]["off"].ToString());
+                if (1 != dbo.AddDelUpdate(sql))
+                {
+                    MessageBox.Show("订单生成过程中出现了错误！");
+                    return;
+                }
+            }
+            MessageBox.Show("订单添加成功！");
+            gdt.Rows.Clear();
+            dataGridView2.DataSource = gdt.DefaultView;
+            textBox5.Text = textBox4.Text = textBox3.Text = textBox2.Text = "";
+            label5.Text = MyOperation.GetNow();
         }
 
         private void textBox4_KeyPress(object sender, KeyPressEventArgs e)
@@ -201,6 +230,22 @@ namespace 悠歌网络合作商家管理系统
                         e.Handled = false;
                 }
             }
+        }
+
+        private void dataGridView2_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+            double  totalprice = 0.0;
+            for (int i = 0; i < gdt.Rows.Count; i++)
+            {
+                totalprice += Convert.ToDouble(gdt.Rows[i]["off"].ToString()) * Convert.ToDouble(gdt.Rows[i]["price"].ToString()) *
+                    Convert.ToInt32(gdt.Rows[i]["count"].ToString());
+            }
+            textBox4.Text = totalprice.ToString();
+        }
+
+        private void textBox1_Click(object sender, EventArgs e)
+        {
+            textBox1.SelectAll();
         }
     }
 }

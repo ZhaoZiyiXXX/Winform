@@ -1,4 +1,6 @@
-DBSyncServer/bin/*
-DBSyncServer/obj/*
 悠歌网络合作商家管理系统/bin/*
 悠歌网络合作商家管理系统/obj/*
+YouGeWebApi/obj/*
+YouGeWebApi/bin/*
+悠歌网络内部办公系统/bin/*
+悠歌网络内部办公系统/obj/*
