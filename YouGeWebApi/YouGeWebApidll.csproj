@@ -47,8 +47,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="resource\f703738da9773912e2af0696f9198618377ae2b8.png" />
     <Content Include="resource\MySql.Data.dll" />
     <Content Include="resource\Newtonsoft.Json.dll" />
+    <Content Include="resource\right.png" />
+    <Content Include="resource\tubiao.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

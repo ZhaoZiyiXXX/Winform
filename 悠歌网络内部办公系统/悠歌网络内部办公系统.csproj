@@ -27,7 +27,7 @@
     <InstallUrl>http://work.mallschool.com/software/1/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>3</ApplicationRevision>
+    <ApplicationRevision>5</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -68,6 +68,9 @@
   <PropertyGroup />
   <PropertyGroup>
     <NoWin32Manifest>true</NoWin32Manifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>tubiao.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MySql.Data">
@@ -114,6 +117,12 @@
     <Compile Include="注册页面.Designer.cs">
       <DependentUpon>注册页面.cs</DependentUpon>
     </Compile>
+    <Compile Include="用户意见处理.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="用户意见处理.Designer.cs">
+      <DependentUpon>用户意见处理.cs</DependentUpon>
+    </Compile>
     <Compile Include="登陆页面.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -137,6 +146,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="注册页面.resx">
       <DependentUpon>注册页面.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="用户意见处理.resx">
+      <DependentUpon>用户意见处理.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="登陆页面.resx">
       <DependentUpon>登陆页面.cs</DependentUpon>
@@ -174,7 +186,9 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="tubiao.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

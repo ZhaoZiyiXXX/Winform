@@ -81,7 +81,6 @@ namespace 悠歌网络合作商家管理系统
             {
                 label2.Text = "选项错误";
             }
-
         }
 
         private void button6_Click(object sender, EventArgs e)

@@ -11,13 +11,58 @@ namespace YouGe
 {
     public class YouGeWebApi
     {
-        private string URL_ROOT = "http://api.jige.olege.com";
+        //private string URL_ROOT = "http://api.jige.olege.com";
+        private string URL_ROOT = "http://api.jigedev.olege.com";
         private string URL_STATUS_API = "http://1.ivanapi.sinaapp.com";
+        private string URL_CURRENT_WEIXIN_VERSION = "http://1.mallschoolwx.sinaapp.com";
         public string GetUrl()
         {
             return this.URL_ROOT;
         }
 
+        public bool UpdateYijian(IDictionary<string, string> parameters)
+        {
+            this.DebugPrint("update开始");
+            string url = string.Format(this.URL_CURRENT_WEIXIN_VERSION + "/outjson/UpdateYijian.php");
+            string html = POST(url, parameters);
+            this.DebugPrint(html);
+            try
+            {
+                JObject jo = (JObject)JsonConvert.DeserializeObject(html);
+                if ("0" == jo["result"].ToString())
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                this.DebugPrint("UpdateYijian:出现catch异常:" + e.Message);
+                return false;
+            } 
+        }
+        public bool GetYijian(out JObject YijianInfo)
+        {
+            string url = string.Format(this.URL_CURRENT_WEIXIN_VERSION + "/outjson/getyijian.php");
+            string html = GET(url);
+            this.DebugPrint("GetYijian返回：" + html);
+            try
+            {
+                JObject jo = (JObject)JsonConvert.DeserializeObject(html);
+                YijianInfo = jo;
+                return true;
+            }
+            catch (Exception e)
+            {
+                this.DebugPrint("GetYijian出现catch异常：" + e.Message);
+                YijianInfo = null;
+                return false;
+            }
+            
+        }
         public bool ActivateNewShop(string id,out JObject ShopInfo)
         {
             string url = string.Format(this.URL_ROOT + "/user?id="+id);

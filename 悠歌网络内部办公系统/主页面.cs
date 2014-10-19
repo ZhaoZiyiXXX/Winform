@@ -61,5 +61,11 @@ namespace 悠歌网络内部办公系统
         {
             backgroundWorker1.RunWorkerAsync();
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            用户意见处理 f = new 用户意见处理();
+            f.Show();
+        }
     }
 }

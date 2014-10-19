@@ -25,6 +25,25 @@ namespace 悠歌网络内部办公系统
             return string.Format("{0:F}", dtStart.Add(toNow));
         }
 
+        public static  string Unix2Datetime(string time)
+        {
+            long unix = Convert.ToInt64(time);
+            unix += 8 * 3600;//加上时区偏移
+            DateTime date = new DateTime(1970, 1, 1).AddSeconds(unix);
+            return string.Format("{0:F}", date);
+        }
+
+        public static string Datetime2Unix(string time)
+        {
+            long i = 8 * 3600;
+            DateTime  baseTime = new DateTime(1970, 1, 1).AddSeconds(i);
+            DateTime newtime = Convert.ToDateTime(time);
+            TimeSpan timespan = newtime - baseTime;
+            long interval = timespan.Ticks / 10000000;
+            return interval.ToString();
+        }
+
+
         public static string GetNow()
         {
             return string.Format("{0:F}", DateTime.Now);
