@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using YouGe;
 
 namespace 悠歌网络合作商家管理系统
 {
@@ -13,7 +14,8 @@ namespace 悠歌网络合作商家管理系统
     {
         DBOperation dbo = new DBOperation();
         DataTable gdt = new DataTable();//全局变量，存储图书订单信息
-        
+        YouGeWinformApi ygw = new YouGeWinformApi();
+
         public 新书入库()
         {
             InitializeComponent();
@@ -40,8 +42,7 @@ namespace 悠歌网络合作商家管理系统
 
         private void SearchByIsbn()
         {
-            string sql = string.Format("SELECT id,name,author,press,price,isbn FROM yg_bookinfo WHERE ISBN = '{0}'", textBox1.Text);
-            DataTable dt = dbo.Selectinfo(sql);
+            DataTable dt = ygw.SearchBookinfoByIsbn(textBox1.Text);
             dataGridView1.DataSource = dt.DefaultView;
         }
 
@@ -60,8 +61,7 @@ namespace 悠歌网络合作商家管理系统
 
         private void cb_binding()
         {
-            string sql = "SELECT * FROM yg_jinhuoqudao";
-            DataTable dt = dbo.Selectinfo(sql);
+            DataTable dt = ygw.GetAllJinhuoqudao();
             comboBox1.DisplayMember = "name";
             comboBox1.ValueMember = "id";
             comboBox1.DataSource = dt;
@@ -150,22 +150,33 @@ namespace 悠歌网络合作商家管理系统
 
         private void button5_Click(object sender, EventArgs e)
         {
-            string sql = string.Format("INSERT INTO yg_orderinfo (datetime ,jinhuoqudao,`name`,`price`) VALUES ('{0}','{1}','{2}','{3}')",
-                label5.Text,comboBox1.SelectedValue ,textBox2.Text,textBox4.Text);
-            dbo.AddDelUpdate(sql);
-            sql = string.Format("SELECT id FROM yg_orderinfo WHERE datetime = '{0}'",label5.Text );
-            DataTable dt = dbo.Selectinfo(sql);
-            if (dt.Rows.Count != 1)
+            YouGeWinformApi.OrderInfo oi = new YouGeWinformApi.OrderInfo();
+            oi.datetime = label5.Text;
+            oi.jinhuoqudao = comboBox1.SelectedValue.ToString();
+            oi.ordername = textBox2.Text;
+            oi.totalprice = textBox4.Text;
+
+            if (!ygw.insertNewOrder(oi))
             {
-                MessageBox.Show("订单生成过程中出现了错误!");
+                MessageBox.Show("订单生成过程中出现了错误1!");
                 return;
             }
-            string orderid = dt.Rows[0]["id"].ToString();
+
+            string orderid = ygw.GetOrderIdByCreateTime(label5.Text);
+            if (null == orderid)
+            {
+                MessageBox.Show("订单生成过程中出现了错误2!");
+                return;
+            }
+
             for (int i = 0; i < gdt.Rows.Count; i++)
             {
-                sql = string.Format("INSERT INTO yg_orderdetail (orderid,bookid,count,off) VALUES ('{0}','{1}','{2}','{3}')",
-                    orderid,gdt.Rows[i]["id"].ToString(),gdt.Rows[i]["count"].ToString(),gdt.Rows[i]["off"].ToString());
-                if (1 != dbo.AddDelUpdate(sql))
+                YouGeWinformApi.OrderDetail od = new YouGeWinformApi.OrderDetail();
+                od.off = gdt.Rows[i]["off"].ToString();
+                od.orderid = orderid;
+                od.count = gdt.Rows[i]["count"].ToString();
+                od.bookid = gdt.Rows[i]["id"].ToString();
+                if (!ygw.insertOrderDetail(od))
                 {
                     MessageBox.Show("订单生成过程中出现了错误！");
                     return;

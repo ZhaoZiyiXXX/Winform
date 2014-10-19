@@ -6,12 +6,14 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using YouGe;
 
 namespace 悠歌网络合作商家管理系统
 {
     public partial class 新增进货渠道 : Form
     {
         DBOperation dbo = new DBOperation();
+        YouGeWinformApi ygw = new YouGeWinformApi();
         public 新增进货渠道()
         {
             InitializeComponent();
@@ -26,11 +28,16 @@ namespace 悠歌网络合作商家管理系统
                 return;
             }
 
-            string sql = "INSERT INTO yg_jinhuoqudao (id,name) VALUES (null,'"+textBox2.Text +"')";
-            dbo.AddDelUpdate(sql);
-            if (MyEvent != null)
-                MyEvent();//引发事件
-            this.Dispose();
+            if (ygw.insertNewJinhuoqudao(textBox2.Text))
+            {
+                if (MyEvent != null)
+                    MyEvent();//引发事件
+                this.Dispose();
+            }
+            else
+            {
+                MessageBox.Show("新增渠道失败");
+            }
         }
 
         //定义委托

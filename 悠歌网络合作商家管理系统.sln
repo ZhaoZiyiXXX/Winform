@@ -4,6 +4,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "悠歌网络合作商家管理系统", "悠歌网络合作商家管理系统\悠歌网络合作商家管理系统.csproj", "{6B845FC9-F223-4785-89D5-B68619BCDB6E}"
 	ProjectSection(ProjectDependencies) = postProject
 		{57569FBC-B1EF-4696-A36B-D22F35152FFF} = {57569FBC-B1EF-4696-A36B-D22F35152FFF}
+		{60B3AEC9-16B0-42A5-BC54-CE3417A3EFF7} = {60B3AEC9-16B0-42A5-BC54-CE3417A3EFF7}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "悠歌网络内部办公系统", "悠歌网络内部办公系统\悠歌网络内部办公系统.csproj", "{528E7347-8B89-42FD-88E7-B3FFDBEE14E5}"
@@ -12,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "悠歌网络内部办公系
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouGeWebApidll", "YouGeWebApi\YouGeWebApidll.csproj", "{57569FBC-B1EF-4696-A36B-D22F35152FFF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouGeWinformApidll", "YouGeWinformApidll\YouGeWinformApidll.csproj", "{60B3AEC9-16B0-42A5-BC54-CE3417A3EFF7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +56,16 @@ Global
 		{57569FBC-B1EF-4696-A36B-D22F35152FFF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{57569FBC-B1EF-4696-A36B-D22F35152FFF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{57569FBC-B1EF-4696-A36B-D22F35152FFF}.Release|x86.ActiveCfg = Release|Any CPU
+		{60B3AEC9-16B0-42A5-BC54-CE3417A3EFF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60B3AEC9-16B0-42A5-BC54-CE3417A3EFF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60B3AEC9-16B0-42A5-BC54-CE3417A3EFF7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{60B3AEC9-16B0-42A5-BC54-CE3417A3EFF7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{60B3AEC9-16B0-42A5-BC54-CE3417A3EFF7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{60B3AEC9-16B0-42A5-BC54-CE3417A3EFF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60B3AEC9-16B0-42A5-BC54-CE3417A3EFF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60B3AEC9-16B0-42A5-BC54-CE3417A3EFF7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{60B3AEC9-16B0-42A5-BC54-CE3417A3EFF7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{60B3AEC9-16B0-42A5-BC54-CE3417A3EFF7}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

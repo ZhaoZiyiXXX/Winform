@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using YouGe;
 
 namespace 悠歌网络合作商家管理系统
 {
@@ -13,6 +14,7 @@ namespace 悠歌网络合作商家管理系统
     {
         private int bookid;
         DBOperation dbo = new DBOperation();
+        YouGeWinformApi ygw = new YouGeWinformApi();
         public 复制新图书信息()
         {
             InitializeComponent();
@@ -27,8 +29,8 @@ namespace 悠歌网络合作商家管理系统
                     MessageBox.Show("系统参数异常，请重新选择！");
                     this.Dispose();
                 }
-                string sql = "SELECT name,author,press,isbn,price FROM yg_bookinfo WHERE id = '" + bookid + "'";
-                DataTable dt = dbo.Selectinfo(sql);
+
+                DataTable dt = ygw.getBookinfoByBookid(bookid.ToString());
                 if (dt.Rows.Count != 1)
                 {
                     MessageBox.Show("系统参数异常，请重新选择！");

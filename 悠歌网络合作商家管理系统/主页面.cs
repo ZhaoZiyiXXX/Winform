@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
+using YouGe;
 
 namespace 悠歌网络合作商家管理系统
 {
@@ -29,28 +30,16 @@ namespace 悠歌网络合作商家管理系统
             Application.Exit();
         }
 
-        private void button11_Click(object sender, EventArgs e)
-        {
-            ProcessStartInfo info = new ProcessStartInfo();
-            string path = System.Windows.Forms.Application.StartupPath + "/DBSyncServer.exe";
-            if (File.Exists(path))
-            {
-                info.FileName = path; // 要启动的程序
-                info.WindowStyle = ProcessWindowStyle.Normal  ;   //隐藏窗口
-                Process pro = Process.Start(info); //启动程序
-            }
-            else
-            {
-                MessageBox.Show("未找到可以启动的应用程序");
-            }
-        }
-
         private void 主页面_Load(object sender, EventArgs e)
         {
-            DBOperation dbo = new DBOperation();
-            string sql = "SELECT * FROM yg_local_shopinfo";
-            DataTable dt = dbo.Selectinfo(sql);
-            label2.Text = dt.Rows[0]["shopname"].ToString();
+            YouGeWinformApi ygw = new YouGeWinformApi();
+            label2.Text = ygw.getLocalShopName();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            二手书入库 f = new 二手书入库();
+            f.Show();
         }
     }
 }
