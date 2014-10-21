@@ -11,8 +11,8 @@ namespace YouGe
 {
     public class YouGeWebApi
     {
-        //private string URL_ROOT = "http://api.jige.olege.com";
-        private string URL_ROOT = "http://api.jigedev.olege.com";
+        private string URL_ROOT = "http://api.jige.olege.com";
+        //private string URL_ROOT = "http://api.jigedev.olege.com";
         private string URL_STATUS_API = "http://1.ivanapi.sinaapp.com";
         private string URL_CURRENT_WEIXIN_VERSION = "http://1.mallschoolwx.sinaapp.com";
         public string GetUrl()

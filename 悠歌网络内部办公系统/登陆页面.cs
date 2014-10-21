@@ -70,7 +70,7 @@ namespace 悠歌网络内部办公系统
                 return;
             }
         }
-
+        
         private void 登录页面_Load(object sender, EventArgs e)
         {
             string k;
@@ -112,6 +112,11 @@ namespace 悠歌网络内部办公系统
             {
                 login();
             }   
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("explorer.exe", System.Windows.Forms.Application.StartupPath);
         }
     }
 }

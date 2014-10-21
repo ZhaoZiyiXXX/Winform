@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
 using YouGe;
+using System.Runtime.InteropServices;
 
 namespace 悠歌网络内部办公系统
 {
@@ -66,6 +67,18 @@ namespace 悠歌网络内部办公系统
         {
             用户意见处理 f = new 用户意见处理();
             f.Show();
+        }
+
+        [DllImport("winmm.dll")]
+        public static extern bool PlaySound(String Filename, int Mod, int Flags); 
+        private void button4_Click(object sender, EventArgs e)
+        {
+            PlaySound(System.Windows.Forms.Application.StartupPath + @"\Music\Msg.wav", 0, 1);    
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("explorer.exe", System.Windows.Forms.Application.StartupPath);
         }
     }
 }
