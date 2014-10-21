@@ -9,7 +9,55 @@ namespace YouGe
 {
     public class YouGeWinformApi
     {
-        public bool insertOldBookInfo(string bookid,string newid)
+        /// <summary>
+        /// 本地图书信息类，与本地bookinfo表对应
+        /// </summary>
+        public struct Localbookinfo
+        {
+            /// <summary>
+            /// 本地id
+            /// </summary>
+            public string id;
+            /// <summary>
+            /// 主数据库全局id
+            /// </summary>
+            public string guid;
+            public string name;
+            public string author;
+            public string press;
+            public string fixedprice;
+            public string isbn;
+            public string imgpath;
+        }
+
+        public bool InsertNewBookInfo(Localbookinfo bi, out string id) 
+        {
+            id = null;
+            string sql = string.Format("INSERT INTO yg_bookinfo (`gbookid`,`name`,`author`,`press`,`price`,`ISBN`,`imgpath`) VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}')",
+               bi.guid,bi.name,bi.author,bi.press,bi.fixedprice,bi.isbn,bi.imgpath);
+            DBOperation dbo = new DBOperation();
+            if (1 != dbo.AddDelUpdate(sql))
+            {
+                return false;
+            }
+            sql = string.Format("SELECT id FROM yg_bookinfo WHERE gbookid = '{0}'",bi.guid);
+            DataTable dt = dbo.Selectinfo(sql);
+            if (dt.Rows.Count > 0)
+            {
+                id = dt.Rows[0]["id"].ToString();
+                return true;
+            }
+            return false;
+        }
+
+        public DataTable GetOldBookInfoById(string id)
+        {
+            DBOperation dbo = new DBOperation();
+            string sql = string.Format("SELECT * FROM OldBookSellInfo WHERE id = '{0}'",id ); 
+            return dbo.Selectinfo(sql);
+        }
+
+        public bool InsertOldBookInfo(string bookid,string newid)
         {
             string sql = string.Format("INSERT INTO yg_oldbookdetail (guid,bookid,status,intime) VALUES ('{0}','{1}','{2}','{3}')",
                 newid, bookid, "0", GetNow());
@@ -23,14 +71,14 @@ namespace YouGe
                 return false;
             }
         }
-        public DataTable getBookinfoByBookid(string id)
+        public DataTable GetBookinfoByBookid(string id)
         {
             DBOperation dbo = new DBOperation();
             string sql = "SELECT name,author,press,isbn,price FROM yg_bookinfo WHERE id = '" + id + "'";
             return dbo.Selectinfo(sql);
         }
 
-        public string getLocalShopName()
+        public string GetLocalShopName()
         {
             DBOperation dbo = new DBOperation();
             string sql = "SELECT * FROM yg_local_shopinfo";
@@ -53,7 +101,7 @@ namespace YouGe
             public string off;
         }
 
-        public bool insertOrderDetail(OrderDetail od)
+        public bool InsertOrderDetail(OrderDetail od)
         {
             string sql = string.Format("INSERT INTO yg_orderdetail (orderid,bookid,count,off) VALUES ('{0}','{1}','{2}','{3}')",
             od.orderid,od.bookid,od.count,od.off);
@@ -76,7 +124,7 @@ namespace YouGe
             public string totalprice;
         }
 
-        public bool insertNewOrder(OrderInfo oi)
+        public bool InsertNewOrder(OrderInfo oi)
         {
             string sql = string.Format("INSERT INTO yg_orderinfo (datetime ,jinhuoqudao,`name`,`price`) VALUES ('{0}','{1}','{2}','{3}')",
                 oi.datetime , oi.jinhuoqudao , oi.ordername , oi.totalprice );
@@ -106,7 +154,7 @@ namespace YouGe
                 return dt.Rows[0]["id"].ToString();
             }
         }
-        public bool insertNewJinhuoqudao(string name)
+        public bool InsertNewJinhuoqudao(string name)
         {
             DBOperation dbo = new DBOperation();
             string sql = "INSERT INTO yg_jinhuoqudao (id,name) VALUES (null,'" + name + "')";

@@ -33,12 +33,18 @@ namespace 悠歌网络合作商家管理系统
         private void 主页面_Load(object sender, EventArgs e)
         {
             YouGeWinformApi ygw = new YouGeWinformApi();
-            label2.Text = ygw.getLocalShopName();
+            label2.Text = ygw.GetLocalShopName();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             二手书入库 f = new 二手书入库();
+            f.Show();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            零售出库 f = new 零售出库();
             f.Show();
         }
     }

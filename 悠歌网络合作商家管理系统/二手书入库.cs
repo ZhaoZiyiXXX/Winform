@@ -14,6 +14,7 @@ namespace 悠歌网络合作商家管理系统
     {
         DBOperation dbo = new DBOperation();
         YouGeWinformApi ygw = new YouGeWinformApi();
+        MyOperation mo = new MyOperation();
         public 二手书入库()
         {
             InitializeComponent();
@@ -27,7 +28,14 @@ namespace 悠歌网络合作商家管理系统
 
         private void SearchByIsbn()
         {
-            DataTable dt = ygw.SearchBookinfoByIsbn(textBox1.Text);
+            DataTable dt = mo.SearchBookinfoByIsbn(textBox1.Text);
+            if (dt.Rows.Count == 0)
+            {
+                MessageBox.Show("没有查询到你要的书籍，请手动录入信息后重新搜索");
+                新增图书信息 f = new 新增图书信息();
+                f.Show();
+                return;
+            }
             dataGridView1.DataSource = dt.DefaultView;
         }
 
@@ -54,7 +62,7 @@ namespace 悠歌网络合作商家管理系统
                 return;
             }
             int index = dataGridView1.CurrentRow.Index; //获取选中行的行号
-            if (ygw.insertOldBookInfo(dataGridView1.Rows[index].Cells[0].Value.ToString(), textBox2.Text))
+            if (ygw.InsertOldBookInfo(dataGridView1.Rows[index].Cells[0].Value.ToString(), textBox2.Text))
             {
                 MessageBox.Show("添加成功");
                 textBox2.Text = "";

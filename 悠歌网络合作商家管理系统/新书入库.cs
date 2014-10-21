@@ -15,7 +15,7 @@ namespace 悠歌网络合作商家管理系统
         DBOperation dbo = new DBOperation();
         DataTable gdt = new DataTable();//全局变量，存储图书订单信息
         YouGeWinformApi ygw = new YouGeWinformApi();
-
+        MyOperation mo = new MyOperation();
         public 新书入库()
         {
             InitializeComponent();
@@ -42,7 +42,14 @@ namespace 悠歌网络合作商家管理系统
 
         private void SearchByIsbn()
         {
-            DataTable dt = ygw.SearchBookinfoByIsbn(textBox1.Text);
+            DataTable dt = mo.SearchBookinfoByIsbn(textBox1.Text);
+            if (dt.Rows.Count == 0)
+            {
+                MessageBox.Show("没有查询到你要的书籍，请手动录入信息后重新搜索");
+                新增图书信息 f = new 新增图书信息();
+                f.Show();
+                return;
+            }
             dataGridView1.DataSource = dt.DefaultView;
         }
 
@@ -156,7 +163,7 @@ namespace 悠歌网络合作商家管理系统
             oi.ordername = textBox2.Text;
             oi.totalprice = textBox4.Text;
 
-            if (!ygw.insertNewOrder(oi))
+            if (!ygw.InsertNewOrder(oi))
             {
                 MessageBox.Show("订单生成过程中出现了错误1!");
                 return;
@@ -176,7 +183,7 @@ namespace 悠歌网络合作商家管理系统
                 od.orderid = orderid;
                 od.count = gdt.Rows[i]["count"].ToString();
                 od.bookid = gdt.Rows[i]["id"].ToString();
-                if (!ygw.insertOrderDetail(od))
+                if (!ygw.InsertOrderDetail(od))
                 {
                     MessageBox.Show("订单生成过程中出现了错误！");
                     return;

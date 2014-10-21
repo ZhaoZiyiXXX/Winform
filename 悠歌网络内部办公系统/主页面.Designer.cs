@@ -41,6 +41,9 @@
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.button3 = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.listBox2 = new System.Windows.Forms.ListBox();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
@@ -168,6 +171,9 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.button3);
+            this.groupBox2.Controls.Add(this.textBox1);
+            this.groupBox2.Controls.Add(this.listBox2);
             this.groupBox2.Controls.Add(this.listBox1);
             this.groupBox2.Location = new System.Drawing.Point(763, 12);
             this.groupBox2.Name = "groupBox2";
@@ -176,13 +182,42 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "在线用户";
             // 
+            // button3
+            // 
+            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button3.Font = new System.Drawing.Font("微软雅黑", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button3.Location = new System.Drawing.Point(141, 448);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(42, 26);
+            this.button3.TabIndex = 3;
+            this.button3.Text = "发送";
+            this.button3.UseVisualStyleBackColor = true;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(14, 451);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(127, 20);
+            this.textBox1.TabIndex = 2;
+            // 
+            // listBox2
+            // 
+            this.listBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.listBox2.FormattingEnabled = true;
+            this.listBox2.Items.AddRange(new object[] {
+            "在线聊天功能开发中..."});
+            this.listBox2.Location = new System.Drawing.Point(14, 144);
+            this.listBox2.Name = "listBox2";
+            this.listBox2.Size = new System.Drawing.Size(169, 301);
+            this.listBox2.TabIndex = 1;
+            // 
             // listBox1
             // 
             this.listBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.listBox1.FormattingEnabled = true;
             this.listBox1.Location = new System.Drawing.Point(14, 19);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(169, 457);
+            this.listBox1.Size = new System.Drawing.Size(169, 119);
             this.listBox1.TabIndex = 0;
             // 
             // backgroundWorker1
@@ -216,6 +251,7 @@
             this.入库.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -236,5 +272,8 @@
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.ListBox listBox2;
     }
 }

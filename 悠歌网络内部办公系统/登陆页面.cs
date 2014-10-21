@@ -22,13 +22,18 @@ namespace 悠歌网络内部办公系统
 
         private void button1_Click(object sender, EventArgs e)
         {
+            login();            
+        }
+
+        private void login()
+        {
             if (string.IsNullOrEmpty(tb_username.Text))
             {
                 MessageBox.Show("请输入用户名");
                 tb_username.Focus();
                 return;
             }
-            if (string.IsNullOrEmpty(textBox1.Text)) 
+            if (string.IsNullOrEmpty(textBox1.Text))
             {
                 MessageBox.Show("请输入密码");
                 textBox1.Focus();
@@ -37,9 +42,8 @@ namespace 悠歌网络内部办公系统
 
             YouGeWebApi yg = new YouGeWebApi();
             JObject userinfo;
-            if (yg.UserAccess(tb_username.Text, textBox1.Text,out userinfo))
+            if (yg.UserAccess(tb_username.Text, textBox1.Text, out userinfo))
             {
-                //TODO：保存用户信息到全局变量
                 try
                 {
                     GlobalVar.name = userinfo["data"]["realname"].ToString();
@@ -65,7 +69,6 @@ namespace 悠歌网络内部办公系统
                 MessageBox.Show("用户名或者密码错误");
                 return;
             }
-            
         }
 
         private void 登录页面_Load(object sender, EventArgs e)
@@ -100,6 +103,15 @@ namespace 悠歌网络内部办公系统
         {
             注册页面 f = new 注册页面();
             f.Show();
+        }
+
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            //回车自动登录
+            if (e.KeyChar == (char)13)
+            {
+                login();
+            }   
         }
     }
 }

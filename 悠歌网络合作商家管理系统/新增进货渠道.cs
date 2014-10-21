@@ -28,7 +28,7 @@ namespace 悠歌网络合作商家管理系统
                 return;
             }
 
-            if (ygw.insertNewJinhuoqudao(textBox2.Text))
+            if (ygw.InsertNewJinhuoqudao(textBox2.Text))
             {
                 if (MyEvent != null)
                     MyEvent();//引发事件

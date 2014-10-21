@@ -20,9 +20,66 @@ namespace YouGe
             return this.URL_ROOT;
         }
 
+        public bool InsertNewBookInfo(IDictionary<string, string> parameters,out string gbookid)
+        {
+            this.DebugPrint("测试");
+            if(!parameters.ContainsKey("isbn")|
+                !parameters.ContainsKey("fixedPrice")|
+                !parameters.ContainsKey("name")|
+                !parameters.ContainsKey("press")|
+                !parameters.ContainsKey("author"))
+            {
+                gbookid = null;
+                this.DebugPrint("InsertNewBookInfo:传入的参数缺失！");
+                return false;
+            }
+
+            string url = string.Format(this.URL_ROOT + "/book");
+            string html = POST(url, parameters);
+            this.DebugPrint(html);
+            try
+            {
+                JObject jo = (JObject)JsonConvert.DeserializeObject(html);
+                if ("0" == jo["result"].ToString())
+                {
+                    gbookid = jo["data"].ToString();
+                    return true;
+                }
+                else
+                {
+                    gbookid = null;
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                this.DebugPrint("InsertNewBookInfo:出现catch异常:" + e.Message);
+                gbookid = null;
+                return false;
+            } 
+        }
+
+        public bool SearchBookinfoByIsbn(string isbn, out JObject bookinfo)
+        {
+            string url = string.Format(this.URL_ROOT + "/book?q={0}&type=ISBN", isbn);
+            string html = GET(url);
+            this.DebugPrint("getBookInfoByIsbn返回：" + html);
+            try
+            {
+                JObject jo = (JObject)JsonConvert.DeserializeObject(html);
+                bookinfo = jo;
+                return true;
+            }
+            catch (Exception e)
+            {
+                this.DebugPrint("getBookInfoByIsbn出现catch异常：" + e.Message);
+                bookinfo = null;
+                return false;
+            }
+        }
+
         public bool UpdateYijian(IDictionary<string, string> parameters)
         {
-            this.DebugPrint("update开始");
             string url = string.Format(this.URL_CURRENT_WEIXIN_VERSION + "/outjson/UpdateYijian.php");
             string html = POST(url, parameters);
             this.DebugPrint(html);
@@ -61,7 +118,6 @@ namespace YouGe
                 YijianInfo = null;
                 return false;
             }
-            
         }
         public bool ActivateNewShop(string id,out JObject ShopInfo)
         {

@@ -15,6 +15,7 @@ namespace 悠歌网络合作商家管理系统
         private int bookid;
         DBOperation dbo = new DBOperation();
         YouGeWinformApi ygw = new YouGeWinformApi();
+        YouGeWebApi yg = new YouGeWebApi();
         public 复制新图书信息()
         {
             InitializeComponent();
@@ -30,7 +31,7 @@ namespace 悠歌网络合作商家管理系统
                     this.Dispose();
                 }
 
-                DataTable dt = ygw.getBookinfoByBookid(bookid.ToString());
+                DataTable dt = ygw.GetBookinfoByBookid(bookid.ToString());
                 if (dt.Rows.Count != 1)
                 {
                     MessageBox.Show("系统参数异常，请重新选择！");
@@ -63,7 +64,37 @@ namespace 悠歌网络合作商家管理系统
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            if(string.IsNullOrEmpty(textBox1.Text))
+            {
+                MessageBox.Show("定价不能为空！");
+                textBox1.Focus();
+                return;
+            }
+            IDictionary<string, string> parameters = new Dictionary<string, string>();
+            parameters.Add("isbn", label7.Text );
+            parameters.Add("fixedPrice", textBox1.Text );
+            parameters.Add("name",label9.Text );
+            parameters.Add("press", ("" == label8.Text) ? "无" : label8.Text);
+            parameters.Add("author", ("" == label10.Text)? "无" : label10.Text);
+            string gbookid;
+            if (yg.InsertNewBookInfo(parameters, out gbookid)) 
+            {
+                YouGeWinformApi.Localbookinfo lbi = new YouGeWinformApi.Localbookinfo();
+                lbi.author = label10.Text;
+                lbi.fixedprice = textBox1.Text;
+                lbi.guid = gbookid;
+                lbi.imgpath = "";
+                lbi.isbn = label7.Text;
+                lbi.name = label9.Text;
+                lbi.press = label8.Text;
+                if (ygw.InsertNewBookInfo(lbi, out gbookid))
+                {
+                    MessageBox.Show("添加成功，重新搜索即可查到");
+                    return;
+                }
+            }
+            MessageBox.Show("添加失败，请在网络状态良好的情况下重试");
+            MyOperation.DebugPrint("复制图书信息失败，请在网络状态良好的情况下重试");
         }
 
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)

@@ -232,6 +232,7 @@
             this.dataGridView2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView2.Location = new System.Drawing.Point(3, 16);
             this.dataGridView2.Name = "dataGridView2";
+            this.dataGridView2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dataGridView2.Size = new System.Drawing.Size(736, 104);
             this.dataGridView2.TabIndex = 21;
             // 
