@@ -21,6 +21,7 @@ namespace 悠歌网络合作商家管理系统
             InitializeComponent();
             InitDataTable();
             dataGridView2.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView2.ClearSelection();
         }
 
         private void InitDataTable(){
@@ -106,9 +107,26 @@ namespace 悠歌网络合作商家管理系统
                 return;
             }
 
+            if (Convert.ToDouble(textBox5.Text) < 0 | Convert.ToDouble(textBox5.Text) > 1)
+            {
+                MessageBox.Show("折扣范围仅允许0-1之间！");
+                textBox5.Focus();
+                return;
+            }
+
             try
             {
                 int index = dataGridView1.CurrentRow.Index;
+                for (int i = 0; i < dataGridView2.RowCount;i++ )
+                {
+                    if (dataGridView1.Rows[index].Cells[0].Value.ToString() == dataGridView2.Rows[i].Cells[0].Value.ToString())
+                    {
+                        MessageBox.Show("已经添加了该品种！");
+                        dataGridView2.ClearSelection();
+                        dataGridView2.Rows[i].Selected = true;
+                        return;
+                    }
+                }
                 DataRow dr = gdt.NewRow();
                 dr["id"] = Convert.ToInt32(dataGridView1.Rows[index].Cells[0].Value.ToString());
                 dr["name"] = dataGridView1.Rows[index].Cells[1].Value.ToString();
@@ -119,6 +137,7 @@ namespace 悠歌网络合作商家管理系统
                 dr["off"] = Convert.ToDouble(textBox5.Text );
                 gdt.Rows.Add(dr);
                 dataGridView2.DataSource = gdt.DefaultView;
+                dataGridView2.ClearSelection();
             }
             catch(Exception ex)
             {
@@ -263,6 +282,30 @@ namespace 悠歌网络合作商家管理系统
         private void textBox1_Click(object sender, EventArgs e)
         {
             textBox1.SelectAll();
+        }
+
+        private void dataGridView2_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            
+            try
+            {
+                int index = dataGridView2.CurrentRow.Index;
+                string bookname = dataGridView2.Rows[index].Cells[1].Value.ToString();
+                string count = dataGridView2.Rows[index].Cells[6].Value.ToString();
+                string off = dataGridView2.Rows[index].Cells[5].Value.ToString();
+                修改新书入库折扣和数量 f = new 修改新书入库折扣和数量(bookname,count,off);
+                f.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("打开新窗体失败！" + ex.Message);
+                return;
+            }
+        }
+
+        public static void ChangeCountAndOff(string bookid,string newcount,string newoff)
+        {
+            
         }
     }
 }

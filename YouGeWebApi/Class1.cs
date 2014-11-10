@@ -22,7 +22,6 @@ namespace YouGe
 
         public bool InsertNewBookInfo(IDictionary<string, string> parameters,out string gbookid)
         {
-            this.DebugPrint("测试");
             if(!parameters.ContainsKey("isbn")|
                 !parameters.ContainsKey("fixedPrice")|
                 !parameters.ContainsKey("name")|

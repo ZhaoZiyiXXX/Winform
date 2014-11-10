@@ -50,7 +50,6 @@ namespace 悠歌网络内部办公系统
             YouGeWebApi yg = new YouGeWebApi();
             List<string> username = new List<string>();
             username = yg.GetOnlineUser();
-            MyOperation.DebugPrint(username.ToString());
             listBox1.Items.Clear();
             foreach (string n in username)
             {

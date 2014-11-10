@@ -80,7 +80,6 @@
             this.Name = "新增进货渠道";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "新增进货渠道";
-            this.Load += new System.EventHandler(this.新增进货渠道_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

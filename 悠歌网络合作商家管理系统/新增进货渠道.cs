@@ -44,11 +44,6 @@ namespace 悠歌网络合作商家管理系统
         public delegate void MyDelegate();
         //定义事件
         public event MyDelegate MyEvent;
-
-        private void 新增进货渠道_Load(object sender, EventArgs e)
-        {
-
-        }
-  
+ 
     }
 }

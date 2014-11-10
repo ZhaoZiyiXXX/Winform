@@ -113,6 +113,18 @@
     <Compile Include="二手书入库.Designer.cs">
       <DependentUpon>二手书入库.cs</DependentUpon>
     </Compile>
+    <Compile Include="修改新书入库折扣和数量.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="修改新书入库折扣和数量.Designer.cs">
+      <DependentUpon>修改新书入库折扣和数量.cs</DependentUpon>
+    </Compile>
+    <Compile Include="图书选择.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="图书选择.Designer.cs">
+      <DependentUpon>图书选择.cs</DependentUpon>
+    </Compile>
     <Compile Include="复制新图书信息.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -156,6 +168,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="二手书入库.resx">
       <DependentUpon>二手书入库.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="修改新书入库折扣和数量.resx">
+      <DependentUpon>修改新书入库折扣和数量.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="图书选择.resx">
+      <DependentUpon>图书选择.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="复制新图书信息.resx">
       <DependentUpon>复制新图书信息.cs</DependentUpon>
@@ -224,22 +242,22 @@
   <ItemGroup>
     <PublishFile Include="Microsoft.VisualBasic.PowerPacks.Vs">
       <Visible>False</Visible>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="MySql.Data">
       <Visible>False</Visible>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
   </ItemGroup>

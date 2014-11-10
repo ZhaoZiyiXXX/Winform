@@ -75,7 +75,7 @@ namespace YouGe
         }
 
         /// <summary>
-        /// 打印LOG函数，当程序统计文件夹下存在apidebug.config文件时，输出log信息到ApiDebug.log文件
+        /// 打印LOG函数，当程序统计文件夹下存在winformdebug.config文件时，输出log信息到WinformDebug.log文件
         /// </summary>
         /// <param name="logtext"></param>
         /// <param name="flag"></param>
