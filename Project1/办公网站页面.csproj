@@ -35,11 +35,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="demo\1.html" />
-    <Content Include="demo\2.html" />
     <Content Include="index.html" />
     <Content Include="src\baiduTemplate.js" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="demo\2.php" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

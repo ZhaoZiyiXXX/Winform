@@ -86,6 +86,21 @@ namespace 悠歌网络合作商家管理系统
                 sellbook();
             }
         }
+        public void HandleChoseResult(string bookid)
+        {
+            DataTable dt = ygw.GetBookinfoByBookid(bookid);
+            DataRow dr = g_dt_n.NewRow();
+            dr["bookid"] = dt.Rows[0]["id"].ToString();
+            dr["name"] = dt.Rows[0]["name"].ToString();
+            dr["press"] = dt.Rows[0]["press"].ToString();
+            dr["price"] = dt.Rows[0]["price"].ToString();
+            dr["type"] = "新书";
+            dr["count"] = "1";
+            dr["off"] = "0.8";
+            dr["totalprice"] = (Convert.ToDouble(dt.Rows[0]["price"].ToString()) * 0.8).ToString();
+            g_dt_n.Rows.Add(dr);
+            BindingDataTable();
+        }
 
         private void sellbook()
         {
@@ -127,11 +142,11 @@ namespace 悠歌网络合作商家管理系统
             {
                 //TODO:新书
                 //先判断是否已经添加了相同的条码
-                
                 DataTable dt = ygw.SearchBookinfoByIsbn(textBox1.Text);
                 if (dt.Rows.Count > 1)
                 {
                     图书选择 f = new 图书选择(dt);
+                    f.MyEvent += new 图书选择.MyDelegate(HandleChoseResult);//监听b窗体事件
                     f.Show();
                 }
                 else if (dt.Rows.Count == 1)

@@ -74,7 +74,7 @@ namespace YouGe
         public DataTable GetBookinfoByBookid(string id)
         {
             DBOperation dbo = new DBOperation();
-            string sql = "SELECT name,author,press,isbn,price FROM yg_bookinfo WHERE id = '" + id + "'";
+            string sql = "SELECT id,name,author,press,isbn,price FROM yg_bookinfo WHERE id = '" + id + "'";
             return dbo.Selectinfo(sql);
         }
 

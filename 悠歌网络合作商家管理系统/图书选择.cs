@@ -28,6 +28,32 @@ namespace 悠歌网络合作商家管理系统
             dataGridView1.DataSource = bookinfo.DefaultView;
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            this.Dispose();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int index = dataGridView1.CurrentRow.Index; //获取选中行的行号
+                if (MyEvent != null)
+                    MyEvent(dataGridView1.Rows[index].Cells[0].Value.ToString());//引发事件
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                this.Dispose();
+            }
+        }
+        //定义委托
+        public delegate void MyDelegate(string bookid);
+        //定义事件
+        public event MyDelegate MyEvent;
 
     }
 }
