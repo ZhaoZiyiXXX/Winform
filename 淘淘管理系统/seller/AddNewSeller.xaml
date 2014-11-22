@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="淘淘管理系统.seller.AddNewSeller"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="900">
+    <Grid>
+        <StackPanel>
+            <StackPanel Orientation="Horizontal" >
+                <Label FontFamily="Microsoft YaHei" FontSize="16" Margin="10" Width="80" HorizontalAlignment="Right" >书主号</Label>
+                <TextBox x:Name="tb_sellerid" Height="23"  Width="300"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" >
+                <Label FontFamily="Microsoft YaHei" FontSize="16" Margin="10" Width="80" HorizontalAlignment="Right" >姓名</Label>
+                <TextBox x:Name="tb_name" Height="23"  Width="300"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" >
+                <Label FontFamily="Microsoft YaHei" FontSize="16" Margin="10" Width="80" HorizontalAlignment="Right" >手机</Label>
+                <TextBox x:Name="tb_phone" Height="23"  Width="300"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" >
+                <Label FontFamily="Microsoft YaHei" FontSize="16" Margin="10" Width="80" HorizontalAlignment="Right" >届别</Label>
+                <TextBox x:Name="tb_grade" Height="23"  Width="300"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" >
+                <Label FontFamily="Microsoft YaHei" FontSize="16" Margin="10" Width="80" HorizontalAlignment="Right" >备注</Label>
+                <TextBox x:Name="tb_mark" Height="23"  Width="300"></TextBox>
+            </StackPanel>
+            <StackPanel>
+                <Button Width="100" FontSize="14"  Height="40" Click="Button_Click" Margin="160,20,140,40" HorizontalAlignment="Left" >确定添加</Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

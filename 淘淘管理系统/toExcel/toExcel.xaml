@@ -1,0 +1,99 @@
+﻿<UserControl x:Class="淘淘管理系统.toExcel.toExcel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="900">
+    <Grid Style="{StaticResource ContentRoot}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="6"/>
+            <ColumnDefinition Width="20*"/>
+        </Grid.ColumnDefinitions>
+        <ScrollViewer Margin="{StaticResource SplitLeft}">
+            <StackPanel>
+                <Label Height="20" VerticalAlignment="Center">当数据量较大时，导出操作会有卡顿，请耐心等待</Label>
+                <Label Height="20" VerticalAlignment="Center">注意：时间选择为当日凌晨0时，因此如果想要导出当天信息，请选到后一天</Label>
+                <Label Height="20" VerticalAlignment="Center" Margin="10,0">比如想要导出2014年1月1号的信息，那么其实日期为1号，结束日期为2号</Label>
+                <GroupBox Header="书主相关" Margin="0,0,10,0">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,5" >
+                            <TextBox FontSize="14" Height="26" Width="100" Name="tb1"  Foreground="Indigo" >
+                                <TextBox.Resources>
+                                    <VisualBrush x:Key="HelpBrush" TileMode="None" Opacity="0.3" Stretch="None" AlignmentX="Left">
+                                        <VisualBrush.Visual>
+                                            <TextBlock FontStyle="Italic" Text="请输入书主ID"/>
+                                        </VisualBrush.Visual>
+                                    </VisualBrush>
+                                </TextBox.Resources>
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox">
+                                        <Style.Triggers>
+                                            <Trigger Property="Text" Value="{x:Null}">
+                                                <Setter Property="Background" Value="{StaticResource HelpBrush}"/>
+                                            </Trigger>
+                                            <Trigger Property="Text" Value="">
+                                                <Setter Property="Background" Value="{StaticResource HelpBrush}"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                            <Button Content="导出该书主交易信息" Height="28" Name="button1" Width="150" Margin="10,0,0,0" Click="button1_Click" />
+                            <Button Content="导出该书主取现信息" Height="28" Name="button2" Width="150" Margin="10,0,0,0" Click="button2_Click" />
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="信息相关" Margin="0,0,10,0">
+                    <StackPanel>
+                        <StackPanel Margin="0,5" >
+                            <Button Content="导出全部员工信息" Height="28" Name="button3" Width="150" Margin="10,0,0,0" Click="button3_Click" />
+                            <Button Content="导出全部书主信息" Height="28" Name="button4" Width="150" Margin="10,0,0,0" Click="button4_Click" />
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="工时相关" Margin="0,20,10,0">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,5" VerticalAlignment="Center" >
+                            <DatePicker Height="28" HorizontalAlignment="Left" Name="datePicker7"  Width="120" SelectedDateFormat="Long" SelectedDateChanged="datePicker7_SelectedDateChanged" />
+                            <DatePicker Height="28" HorizontalAlignment="Left" Margin="10,0,0,0" Name="datePicker8" Width="120" SelectedDateFormat="Long">
+                            </DatePicker>
+                            <Button Content="导出该阶段工时信息" Height="28" Name="button8" Width="150" Margin="10,0,0,0" Click="button8_Click" />
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
+        <ScrollViewer Grid.Column="2 " Margin="{StaticResource SplitRight}">
+            <StackPanel>
+                <GroupBox Header="财务相关" Margin="0,20,10,0">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,5" VerticalAlignment="Center" >
+                            <DatePicker Height="28" HorizontalAlignment="Left" Name="datePicker1"  Width="120" SelectedDateFormat="Long" SelectedDateChanged="datePicker1_SelectedDateChanged" />
+                            <DatePicker Height="28" HorizontalAlignment="Left" Margin="10,0,0,0" Name="datePicker2" Width="120" SelectedDateFormat="Long">
+                            </DatePicker>
+                            <Button Content="导出该阶段取现信息" Height="28" Name="button5" Width="150" Margin="10,0,0,0" Click="button5_Click" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,5" VerticalAlignment="Center" >
+                            <DatePicker Height="28" HorizontalAlignment="Left" Name="datePicker3"  Width="120" SelectedDateFormat="Long" SelectedDateChanged="datePicker3_SelectedDateChanged" />
+                            <DatePicker Height="28" HorizontalAlignment="Left" Margin="10,0,0,0" Name="datePicker4" Width="120" SelectedDateFormat="Long">
+                            </DatePicker>
+                            <Button Content="导出该阶段出售信息" Height="28" Name="button6" Width="150" Margin="10,0,0,0" Click="button6_Click" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,5" VerticalAlignment="Center" >
+                            <DatePicker Height="28" HorizontalAlignment="Left" Name="datePicker5"  Width="120" SelectedDateFormat="Long" SelectedDateChanged="datePicker5_SelectedDateChanged" />
+                            <DatePicker Height="28" HorizontalAlignment="Left" Margin="10,0,0,0" Name="datePicker6" Width="120" SelectedDateFormat="Long">
+                            </DatePicker>
+                            <Button Content="导出该阶段现金信息" Height="28" Name="button7" Width="150" Margin="10,0,0,0" Click="button7_Click" />
+                        </StackPanel>
+
+                    </StackPanel>
+                </GroupBox>
+
+            </StackPanel>
+        </ScrollViewer>
+        
+    </Grid>
+</UserControl>

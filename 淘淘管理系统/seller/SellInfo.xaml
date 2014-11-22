@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="淘淘管理系统.seller.SellInfo"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="900">
+    <Grid>
+
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Height="50">
+            <Label FontFamily="Microsoft YaHei" FontSize="16" Width="80" Height="30" HorizontalContentAlignment="Right" VerticalContentAlignment="Center">书主号</Label>
+            <TextBox FontFamily="Microsoft YaHei" FontSize="16" x:Name="tb_sellerid" Height="30"  Width="300" Margin="10"></TextBox>
+            <Button FontFamily="Microsoft YaHei" FontSize="16" x:Name="button1" Content="查找" Height="30"  Width="100" Click="button1_Click"></Button>
+            <Label Name="lb_info" FontFamily="Microsoft YaHei" FontSize="16" Height="30" HorizontalContentAlignment="Right" VerticalContentAlignment="Center">共寄售0本，已出售0本</Label>
+        </StackPanel>
+
+        <DataGrid x:Name="dataGrid" ItemsSource="{Binding}" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single"
+                  VerticalScrollBarVisibility="Auto"  Margin="10,50">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="图书ID" Width="100" Binding="{Binding 图书ID}" />
+                <DataGridTextColumn Header="书名" Width="200" Binding="{Binding 书名}"/>
+                <DataGridTextColumn Header="出版社" Width="160" Binding="{Binding 出版社}"/>
+                <DataGridTextColumn Header="售价" Width="80" Binding="{Binding 售价}"/>
+                <DataGridTextColumn Header="是否出售" Width="90" Binding="{Binding 是否出售}" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </Grid>
+</UserControl>

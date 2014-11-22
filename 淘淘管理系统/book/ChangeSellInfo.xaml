@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="淘淘管理系统.book.ChangeSellInfo"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="900">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="58*" />
+            <RowDefinition Height="282*" />
+            <RowDefinition Height="60*" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0">
+            <StackPanel Orientation="Horizontal" >
+                <Label FontFamily="Microsoft YaHei" FontSize="16" Margin="10" Width="200" HorizontalContentAlignment="Right" >请输入要修改的图书ID</Label>
+                <TextBox x:Name="tb_sellidsearch" Height="23"  Width="160" KeyDown="tb_sellidsearch_KeyDown"></TextBox>
+                <Button Content="搜索" FontFamily="Microsoft YaHei" FontSize="16" Height="30" Name="button0" Width="100" Margin="5" Click="button0_Click" />
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Name="sp1">
+            <Label Name="lb_bookinfo" FontFamily="Microsoft YaHei" FontSize="16" Margin="10" Width="300"  HorizontalContentAlignment="Left"></Label>
+            <TextBox x:Name="tb_price" Height="23"  Width="300"  KeyDown="tb_price_KeyDown"></TextBox>
+            <Button Content="修改价格" FontFamily="Microsoft YaHei" FontSize="16" Height="40" Name="button2" Width="100" Margin="5" Click="button2_Click" />
+        </StackPanel>
+    </Grid>
+</UserControl>

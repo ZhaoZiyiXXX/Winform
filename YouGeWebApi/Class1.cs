@@ -11,8 +11,8 @@ namespace YouGe
 {
     public class YouGeWebApi
     {
-        private string URL_ROOT = "http://api.jige.olege.com";
-        //private string URL_ROOT = "http://api.jigedev.olege.com";
+        //private string URL_ROOT = "http://api.jige.olege.com";
+        private string URL_ROOT = "http://api.jigedev.olege.com";
         private string URL_STATUS_API = "http://1.ivanapi.sinaapp.com";
         private string URL_CURRENT_WEIXIN_VERSION = "http://1.mallschoolwx.sinaapp.com";
         public string GetUrl()
@@ -20,6 +20,159 @@ namespace YouGe
             return this.URL_ROOT;
         }
 
+        /// <summary>
+        /// 根据交易ID，售价以及图书编号确定是否存在这样一笔交易。
+        /// 如果图书编号不一致，则将原交易信息关闭并返回False
+        /// 如果定价不一致的情况本函数会自动更新成一致并返回true
+        /// </summary>
+        /// <param name="sellid"></param>
+        /// <param name="bookid"></param>
+        /// <param name="price"></param>
+        /// <returns></returns>
+        public bool IsExistSellInfo(string sellid,string bookid,string price)
+        {
+            try{
+                JObject jo;
+                if (GetSellInfoById(sellid, out jo))
+                {
+                    if (bookid != jo["data"]["book_id"].ToString() )
+                    {
+                        IDictionary<string, string> parameters = new Dictionary<string, string>();
+                        parameters.Add("id", sellid);
+                        parameters.Add("status", "1");
+                        this.UpdateSellInfo(parameters);
+                        return false;
+                    }
+                    else if (price != jo["data"]["price"].ToString())
+                    {
+                        IDictionary<string, string> parameters = new Dictionary<string, string>();
+                        parameters.Add("id", sellid);
+                        parameters.Add("price", price);
+                        this.UpdateSellInfo(parameters);
+                        return true;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }catch(Exception ex){
+                this.DebugPrint("IsExistSellInfo Error:" + ex.Message );
+                return false;
+            }
+            
+        }
+        /// <summary>
+        /// 通过交易ID获取交易详情
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="bookinfo"></param>
+        /// <returns></returns>
+        public bool GetSellInfoById(string id,out JObject bookinfo)
+        {
+            string url = string.Format(this.URL_ROOT + "/sell?id={0}", id);
+            string html = GET(url);
+            this.DebugPrint("GetSellInfoById返回：" + html);
+            try
+            {
+                JObject jo = (JObject)JsonConvert.DeserializeObject(html);
+                bookinfo = jo;
+                return true;
+            }
+            catch (Exception e)
+            {
+                this.DebugPrint("GetSellInfoById出现catch异常：" + e.Message,3);
+                bookinfo = null;
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 更新交易信息，传入参数必须有ID一项
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public bool UpdateSellInfo(IDictionary<string, string> parameters)
+        {
+            if (!parameters.ContainsKey("id"))
+            {
+                this.DebugPrint("UpdateSellInfo:传入的参数缺失！");
+                return false;
+            }
+
+            string url = string.Format(this.URL_ROOT + "/sell");
+            string html = POST(url, parameters);
+            this.DebugPrint(html);
+            try
+            {
+                JObject jo = (JObject)JsonConvert.DeserializeObject(html);
+                if ("0" == jo["result"].ToString())
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                this.DebugPrint("UpdateSellInfo:出现catch异常:" + e.Message);
+                return false;
+            }
+        }
+        /// <summary>
+        /// 插入一条新的交易信息，必须包含book_id，seller_id，price
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <param name="sellinfoid"></param>
+        /// <returns></returns>
+        public bool InsertNewSellInfo(IDictionary<string, string> parameters, out string sellinfoid)
+        {
+            if (!parameters.ContainsKey("book_id") |
+                !parameters.ContainsKey("seller_id") |
+                !parameters.ContainsKey("price"))
+            {
+                sellinfoid = null;
+                this.DebugPrint("InsertNewSellInfo:传入的参数缺失！");
+                return false;
+            }
+
+            string url = string.Format(this.URL_ROOT + "/sell");
+            string html = POST(url, parameters);
+            this.DebugPrint(html);
+            try
+            {
+                JObject jo = (JObject)JsonConvert.DeserializeObject(html);
+                if ("0" == jo["result"].ToString())
+                {
+                    sellinfoid = jo["data"].ToString();
+                    return true;
+                }
+                else
+                {
+                    sellinfoid = null;
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                this.DebugPrint("InsertNewSellInfo:出现catch异常:" + e.Message);
+                sellinfoid = null;
+                return false;
+            } 
+        }
+
+        /// <summary>
+        /// 新增图书信息，返回添加后的id
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <param name="gbookid"></param>
+        /// <returns></returns>
         public bool InsertNewBookInfo(IDictionary<string, string> parameters,out string gbookid)
         {
             if(!parameters.ContainsKey("isbn")|
@@ -58,6 +211,12 @@ namespace YouGe
             } 
         }
 
+        /// <summary>
+        /// 根据ISBN号搜索图书信息
+        /// </summary>
+        /// <param name="isbn"></param>
+        /// <param name="bookinfo"></param>
+        /// <returns></returns>
         public bool SearchBookinfoByIsbn(string isbn, out JObject bookinfo)
         {
             string url = string.Format(this.URL_ROOT + "/book?q={0}&type=ISBN", isbn);
@@ -77,6 +236,11 @@ namespace YouGe
             }
         }
 
+        /// <summary>
+        /// 更新意见信息
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         public bool UpdateYijian(IDictionary<string, string> parameters)
         {
             string url = string.Format(this.URL_CURRENT_WEIXIN_VERSION + "/outjson/UpdateYijian.php");
@@ -100,6 +264,12 @@ namespace YouGe
                 return false;
             } 
         }
+
+        /// <summary>
+        /// 获取用户意见列表
+        /// </summary>
+        /// <param name="YijianInfo"></param>
+        /// <returns></returns>
         public bool GetYijian(out JObject YijianInfo)
         {
             string url = string.Format(this.URL_CURRENT_WEIXIN_VERSION + "/outjson/getyijian.php");
@@ -118,6 +288,13 @@ namespace YouGe
                 return false;
             }
         }
+
+        /// <summary>
+        /// 新店铺激活
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="ShopInfo"></param>
+        /// <returns></returns>
         public bool ActivateNewShop(string id,out JObject ShopInfo)
         {
             string url = string.Format(this.URL_ROOT + "/user?id="+id);
@@ -145,6 +322,11 @@ namespace YouGe
             }
 
         }
+
+        /// <summary>
+        /// 重置图书审核状态
+        /// </summary>
+        /// <returns></returns>
         public bool ResetReviewBookInfo()
         {
             string url = string.Format(this.URL_ROOT + "/work/BookReviewReset");
@@ -170,6 +352,12 @@ namespace YouGe
             }
 
         }
+
+        /// <summary>
+        /// 获取待审核的图书信息
+        /// </summary>
+        /// <param name="bookinfo"></param>
+        /// <returns></returns>
         public bool GetReviewBookInfo(out JObject bookinfo)
         {
             string url = URL_ROOT + "/work/BookReview";
@@ -196,6 +384,11 @@ namespace YouGe
             }
         }
 
+        /// <summary>
+        /// 提交审核之后的图书信息
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         public bool PostReviewBookInfo(IDictionary<string, string> parameters)
         {
             string url = string.Format(this.URL_ROOT + "/work/BookReview");
@@ -371,6 +564,9 @@ namespace YouGe
             }
         }
 
+        # region 基础函数
+
+
         private string POST(string url, IDictionary<string, string> parameters = null, string encode = "UTF-8")
         {
             Encoding encoding = Encoding.GetEncoding(encode);
@@ -472,5 +668,7 @@ namespace YouGe
                 return null;
             }
         }
+
+        #endregion
     }
 }

@@ -18,6 +18,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouGeWinformApidll", "YouGe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "办公网站页面", "Project1\办公网站页面.csproj", "{C4D5A576-3F4E-48B8-9747-0EFC291D48F0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "淘淘管理系统", "淘淘管理系统\淘淘管理系统.csproj", "{91B3007D-3B16-4140-AA61-85BA75760A2B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{57569FBC-B1EF-4696-A36B-D22F35152FFF} = {57569FBC-B1EF-4696-A36B-D22F35152FFF}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,6 +83,16 @@ Global
 		{C4D5A576-3F4E-48B8-9747-0EFC291D48F0}.Release|Mixed Platforms.Build.0 = Release|x86
 		{C4D5A576-3F4E-48B8-9747-0EFC291D48F0}.Release|x86.ActiveCfg = Release|x86
 		{C4D5A576-3F4E-48B8-9747-0EFC291D48F0}.Release|x86.Build.0 = Release|x86
+		{91B3007D-3B16-4140-AA61-85BA75760A2B}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{91B3007D-3B16-4140-AA61-85BA75760A2B}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{91B3007D-3B16-4140-AA61-85BA75760A2B}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{91B3007D-3B16-4140-AA61-85BA75760A2B}.Debug|x86.ActiveCfg = Debug|x86
+		{91B3007D-3B16-4140-AA61-85BA75760A2B}.Debug|x86.Build.0 = Debug|x86
+		{91B3007D-3B16-4140-AA61-85BA75760A2B}.Release|Any CPU.ActiveCfg = Release|x86
+		{91B3007D-3B16-4140-AA61-85BA75760A2B}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{91B3007D-3B16-4140-AA61-85BA75760A2B}.Release|Mixed Platforms.Build.0 = Release|x86
+		{91B3007D-3B16-4140-AA61-85BA75760A2B}.Release|x86.ActiveCfg = Release|x86
+		{91B3007D-3B16-4140-AA61-85BA75760A2B}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

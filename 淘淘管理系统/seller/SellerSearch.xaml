@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="淘淘管理系统.seller.SellerSearch"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="900">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="0" >
+            <TextBox Height="25" Name="textBox1" Width="120" />
+            <Button Content="搜索书主号或姓名" Height="25" Name="button1" Width="150" Click="button1_Click" />
+            <Button Content="搜索手机号" Height="25" Name="button2" Width="100" Click="button2_Click" />
+        </StackPanel>
+        <DataGrid x:Name="dataGrid" ItemsSource="{Binding}" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single" Width="700"
+                    VerticalScrollBarVisibility="Auto" Grid.Row="1" >
+            <DataGrid.Columns >
+                <DataGridTextColumn Header="书主号" Width="150*" Binding="{Binding sellerid}" />
+                <DataGridTextColumn Header="姓名" Width="150*" Binding="{Binding name}"/>
+                <DataGridTextColumn Header="手机" Width="150*" Binding="{Binding phone}"/>
+                <DataGridTextColumn Header="届别" Width="150*" Binding="{Binding grade}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </Grid>
+</UserControl>

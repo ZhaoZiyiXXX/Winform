@@ -1,0 +1,51 @@
+﻿<mui:ModernWindow x:Class="淘淘管理系统.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+        ContentSource="/mainmenu/notice.xaml"
+        Title="MainWindow" Height="700" Width="1000"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ResourceDictionary>
+            <Style x:Key="dgCell" TargetType="TextBlock">
+                <Setter Property="TextAlignment" Value="Center"/>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+    <mui:ModernWindow.MenuLinkGroups>
+        <mui:LinkGroup DisplayName="主菜单" >
+            <mui:LinkGroup.Links>
+                <mui:Link DisplayName="公告"  Source="/mainmenu/notice.xaml" />
+                <mui:Link DisplayName="工时申报" Source=" /mainmenu/time.xaml"/>
+                <mui:Link DisplayName="下班结账" Source=" /mainmenu/jiezhang.xaml"/>
+            </mui:LinkGroup.Links>
+        </mui:LinkGroup>
+        <mui:LinkGroup DisplayName="书籍管理" x:Name="book">
+            <mui:LinkGroup.Links>
+                <mui:Link DisplayName="入库" Source="/book/NewSellInfo.xaml"/>
+                <mui:Link DisplayName="出售" Source="/book/BookSell.xaml"/>
+                <mui:Link DisplayName="修改交易信息" Source="/book/ChangeSellInfo.xaml"/>
+            </mui:LinkGroup.Links>
+        </mui:LinkGroup>
+        <mui:LinkGroup DisplayName="书主管理" x:Name="seller">
+            <mui:LinkGroup.Links>
+                <mui:Link DisplayName="添加书主" Source="/seller/AddNewSeller.xaml" />
+                <mui:Link DisplayName="查询书主" Source="/seller/SellerSearch.xaml"/>
+                <mui:Link DisplayName="寄售情况" Source="/seller/SellInfo.xaml"/>
+                <mui:Link DisplayName="书主结账" Source="/seller/finance.xaml"/>
+                <mui:Link DisplayName="修改信息" Source="/seller/changeinfo.xaml"/>
+            </mui:LinkGroup.Links>
+        </mui:LinkGroup>
+        <mui:LinkGroup DisplayName="单据导出" x:Name="toExcel">
+            <mui:LinkGroup.Links>
+                <mui:Link DisplayName="报表导出" Source="/toExcel/toExcel.xaml" />
+            </mui:LinkGroup.Links>
+        </mui:LinkGroup>
+        <mui:LinkGroup DisplayName="系统管理" x:Name="system">
+            <mui:LinkGroup.Links>
+                <mui:Link DisplayName="新增员工" Source="/system/NewStaff.xaml"/>
+                <mui:Link DisplayName="新增公告" Source="/system/newnotice.xaml" />
+            </mui:LinkGroup.Links>
+        </mui:LinkGroup>
+    </mui:ModernWindow.MenuLinkGroups>
+</mui:ModernWindow>

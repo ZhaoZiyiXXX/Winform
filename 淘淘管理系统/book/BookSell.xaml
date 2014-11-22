@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="淘淘管理系统.book.BookSell"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="900" xmlns:my="clr-namespace:淘淘管理系统.seller">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="64*" />
+            <RowDefinition Height="65*" />
+            <RowDefinition Height="65*" />
+            <RowDefinition Height="216*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="104*" />
+            <ColumnDefinition Width="336*" />
+            <ColumnDefinition Width="346*" />
+            <ColumnDefinition Width="114*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" Margin="0,10" HorizontalAlignment="Left" Width="336">
+            <Label FontFamily="Microsoft YaHei" FontSize="16" Content="图书编号" Height="25" HorizontalAlignment="Center" Name="label2" VerticalAlignment="Center" Width="82" Margin="10" />
+            <TextBox FontFamily="Microsoft YaHei" FontSize="16"  Height="23" HorizontalAlignment="Center"  Name="textBox2" VerticalAlignment="Center" Width="120" Margin="10"/>
+            <Button FontFamily="Microsoft YaHei" FontSize="16" Content="查询" Height="30" HorizontalAlignment="Center" Name="button2" VerticalAlignment="Center"  Width="75" Margin="10" Click="button2_Click"/>
+        </StackPanel>
+        <Label Name="lb_bookinfo" FontFamily="Microsoft YaHei" FontSize="16" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" HorizontalAlignment="Left" VerticalAlignment="Top" ></Label>
+        <Button Grid.Column="1" Grid.Row="3" FontFamily="Microsoft YaHei" FontSize="16" Content="确认出售" Height="30" HorizontalAlignment="Center" Name="button3" VerticalAlignment="Center"  Width="150" Margin="92,22,94,159" Click="button3_Click"/>
+    </Grid>
+</UserControl>
