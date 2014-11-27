@@ -34,5 +34,17 @@ namespace 淘淘管理系统.Properties {
                 this["username"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("546ef619959e76a9178b456b")]
+        public string sellerid {
+            get {
+                return ((string)(this["sellerid"]));
+            }
+            set {
+                this["sellerid"] = value;
+            }
+        }
     }
 }

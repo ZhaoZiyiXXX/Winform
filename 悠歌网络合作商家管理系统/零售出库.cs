@@ -18,6 +18,7 @@ namespace 悠歌网络合作商家管理系统
             InitializeComponent();
             initNewBookTable();
             BindingDataTable();
+            comboBox1.Visible = false;
         }
 
         DataTable g_dt_n = new DataTable();
@@ -48,6 +49,7 @@ namespace 悠歌网络合作商家管理系统
             g_dt.Columns.Add("totalprice", System.Type.GetType("System.String"));
             int i = 0;
             //绑定二手书数据到DataGridView
+
             for (i = 0; i < g_dt_o.Rows.Count;i++ )
             {
                 DataRow dr = g_dt.NewRow();
@@ -56,8 +58,12 @@ namespace 悠歌网络合作商家管理系统
                 dr["price"] = g_dt_o.Rows[i]["price"].ToString();
                 dr["type"] = "二手";
                 dr["count"] = "1";
-                dr["off"] = "0.5";
-                dr["totalprice"] = (Convert.ToDouble(g_dt_o.Rows[i]["price"].ToString()) * 0.5).ToString();
+                g_dt_o.Rows[i]["off"] = (string.IsNullOrEmpty(g_dt_o.Rows[i]["off"].ToString()) ? "0.5" : g_dt_o.Rows[i]["off"].ToString());
+                dr["off"] = g_dt_o.Rows[i]["off"].ToString();
+                g_dt_o.Rows[i]["totalprice"] = (string.IsNullOrEmpty(g_dt_o.Rows[i]["totalprice"].ToString()) ?
+                    (Convert.ToDouble(g_dt_o.Rows[i]["price"].ToString()) * Convert.ToDouble(dr["off"].ToString())).ToString() :
+                    g_dt_o.Rows[i]["totalprice"].ToString());
+                dr["totalprice"] = g_dt_o.Rows[i]["totalprice"].ToString();
                 g_dt.Rows.Add(dr);
             }
 
@@ -130,6 +136,8 @@ namespace 悠歌网络合作商家管理系统
                 }
                 else
                 {
+                    dt.Columns.Add("off", System.Type.GetType("System.String"));
+                    dt.Columns.Add("totalprice", System.Type.GetType("System.String"));
                     if (g_dt_o.Rows.Count == 0)
                     {
                         g_dt_o = dt.Copy();
@@ -140,7 +148,6 @@ namespace 悠歌网络合作商家管理系统
             }
             else
             {
-                //TODO:新书
                 //先判断是否已经添加了相同的条码
                 DataTable dt = ygw.SearchBookinfoByIsbn(textBox1.Text);
                 if (dt.Rows.Count > 1)
@@ -181,14 +188,17 @@ namespace 悠歌网络合作商家管理系统
 
         private void dataGridView1_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
         {
+             CalcTotalPrice();
+        }
+
+        private void CalcTotalPrice()
+        {
             double totalprice = 0.0;
             //计算总和
             for (int i = 0; i < dataGridView1.Rows.Count; i++)
             {
                 totalprice += Convert.ToDouble(dataGridView1.Rows[i].Cells[6].Value.ToString());
             }
-
-            //显示
             label4.Text = totalprice.ToString();
         }
 
@@ -197,5 +207,232 @@ namespace 悠歌网络合作商家管理系统
             textBox2.Text = label4.Text;
         }
 
+        private void button6_Click(object sender, EventArgs e)
+        {
+            int i = 0;
+            for(i = 0;i<g_dt_n.Rows.Count;i++)
+            {
+                if(!ygw.SoldNewBook(g_dt_n.Rows[i]["bookid"].ToString(),Convert.ToInt32(g_dt_n.Rows[i]["count"].ToString())))
+                {
+                    MessageBox.Show("零售订单处理失败，请联系管理员查看");
+                    return;
+                }
+            }
+
+            for (i = 0; i < g_dt_o.Rows.Count; i++)
+            {
+                if (!ygw.SoldOldBook(g_dt_o.Rows[i]["id"].ToString()))
+                {
+                    MessageBox.Show("零售订单处理失败，请联系管理员查看");
+                    return;
+                }
+            }
+
+            MessageBox.Show("零售订单处理完成");
+            g_dt_n.Rows.Clear();
+            g_dt_o.Rows.Clear();
+            textBox3.Text = textBox4.Text = textBox2.Text = label4.Text = "";
+            label5.Text = "书名";
+            label6.Text = "出版社";
+            label7.Text = "数量";
+            BindingDataTable();
+        }
+
+        private void dataGridView1_SelectionChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                int index = dataGridView1.CurrentRow.Index;
+                label5.Text = "书名:" + dataGridView1.Rows[index].Cells[0].Value.ToString();
+                label6.Text = "出版社:" + dataGridView1.Rows[index].Cells[1].Value.ToString();
+                label7.Text = "定价:" + dataGridView1.Rows[index].Cells[2].Value.ToString();
+                textBox3.Text = dataGridView1.Rows[index].Cells[4].Value.ToString();
+                textBox4.Text = dataGridView1.Rows[index].Cells[5].Value.ToString();
+                if ("新书" == dataGridView1.Rows[index].Cells[3].Value.ToString())
+                {
+                    textBox3.Enabled = true;
+                    comboBox1.Visible = false;
+                }
+                else
+                {
+                    textBox3.Enabled = false;
+                    comboBox1.Visible = true;
+                    comboBox1.Items.Clear();
+                    DataRow[] dr = g_dt_o.Select(string.Format("name = '{0}' AND press = '{1}' AND price = '{2}'",
+                        dataGridView1.Rows[index].Cells[0].Value.ToString(),
+                        dataGridView1.Rows[index].Cells[1].Value.ToString(),
+                        dataGridView1.Rows[index].Cells[2].Value.ToString()));
+                    for (int i = 0; i < dr.Length; i++)
+                    {
+                        comboBox1.Items.Add(dr[i]["id"].ToString());
+                    }
+                    if (dr.Length > 0)
+                    {
+                        comboBox1.SelectedIndex = 0;
+                    }
+                        
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("出现异常，请联系管理员处理！" + ex.Message);
+                return;
+            } 
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int index = dataGridView1.CurrentRow.Index;
+                if ("新书" == dataGridView1.Rows[index].Cells[3].Value.ToString())
+                {
+                    DataRow[] dr = g_dt_n.Select(string.Format("name = '{0}' AND press = '{1}' AND price = '{2}' AND count = '{3}'",
+                        dataGridView1.Rows[index].Cells[0].Value.ToString(), 
+                        dataGridView1.Rows[index].Cells[1].Value.ToString(),
+                        dataGridView1.Rows[index].Cells[2].Value.ToString(), 
+                        dataGridView1.Rows[index].Cells[4].Value.ToString()));
+                    if (dr.Length  >= 1)
+                    {
+                        dr[0]["count"] = textBox3.Text;
+                        dr[0]["off"] = textBox4.Text;
+                        dr[0]["totalprice"] = (Convert.ToDouble(dr[0]["off"].ToString())
+                             * Convert.ToInt32(dr[0]["count"].ToString())
+                            * Convert.ToDouble(dr[0]["price"].ToString())).ToString();
+                    }
+                }
+                else if ("二手" == dataGridView1.Rows[index].Cells[3].Value.ToString())
+                {
+                    DataRow[] dr = g_dt_o.Select(string.Format("name = '{0}' AND press = '{1}' AND price = '{2}'",
+                        dataGridView1.Rows[index].Cells[0].Value.ToString(),
+                        dataGridView1.Rows[index].Cells[1].Value.ToString(),
+                        dataGridView1.Rows[index].Cells[2].Value.ToString()));
+                    if (dr.Length == 1)
+                    {
+                        dr[0]["off"] = textBox4.Text;
+                        dr[0]["totalprice"] = (Convert.ToDouble(dr[0]["off"].ToString())
+                            * Convert.ToDouble(dr[0]["price"].ToString())).ToString();
+                    }
+                    else if (dr.Length >= 1)
+                    {
+                        //多个二手的情况下让用户二次确认
+                        if(DialogResult.Yes  == MessageBox.Show("您的订单中存在多本相同信息的二手书，请确认是否已经选择了对应的唯一编码","二次确认",MessageBoxButtons.YesNo))
+                        {
+                            dr = g_dt_o.Select(string.Format("name = '{0}' AND press = '{1}' AND price = '{2}' AND id = '{3}'",
+                                dataGridView1.Rows[index].Cells[0].Value.ToString(),
+                                dataGridView1.Rows[index].Cells[1].Value.ToString(),
+                                dataGridView1.Rows[index].Cells[2].Value.ToString(),
+                                comboBox1.SelectedItem.ToString()));
+                            if (dr.Length != 1)
+                            {
+                                MessageBox.Show("选择的ID和图书信息不对应，请仔细确认信息");
+                            }
+                            else 
+                            {
+                                dr[0]["off"] = textBox4.Text;
+                                dr[0]["totalprice"] = (Convert.ToDouble(dr[0]["off"].ToString())
+                                    * Convert.ToDouble(dr[0]["price"].ToString())).ToString();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("修改图书零售信息时出现系统异常，数组个数：" + dr.Length.ToString());
+                        return;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("零售出库时无法判断图书类别");
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("尚未选择要修改的交易信息！" + ex.Message);
+                return;
+            }
+            finally
+            {
+                BindingDataTable();
+                CalcTotalPrice();
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int index = dataGridView1.CurrentRow.Index;
+                if ("新书" == dataGridView1.Rows[index].Cells[3].Value.ToString())
+                {
+                    DataRow[] dr = g_dt_n.Select(string.Format("name = '{0}' AND press = '{1}' AND price = '{2}' AND count = '{3}'",
+                        dataGridView1.Rows[index].Cells[0].Value.ToString(),
+                        dataGridView1.Rows[index].Cells[1].Value.ToString(),
+                        dataGridView1.Rows[index].Cells[2].Value.ToString(),
+                        dataGridView1.Rows[index].Cells[4].Value.ToString()));
+                    if (dr.Length >= 1)
+                    {
+                        g_dt_n.Rows.Remove(dr[0]);
+                    }
+                    else
+                    {
+                        MessageBox.Show("删除图书时出现系统异常，数组个数："+dr.Length.ToString());
+                        return;
+                    }
+                }
+                else if ("二手" == dataGridView1.Rows[index].Cells[3].Value.ToString())
+                {
+                    DataRow[] dr = g_dt_o.Select(string.Format("name = '{0}' AND press = '{1}' AND price = '{2}'",
+                        dataGridView1.Rows[index].Cells[0].Value.ToString(),
+                        dataGridView1.Rows[index].Cells[1].Value.ToString(),
+                        dataGridView1.Rows[index].Cells[2].Value.ToString()));
+                    if (dr.Length == 1)
+                    {
+                        g_dt_o.Rows.Remove(dr[0]);
+                    }
+                    else if(dr.Length > 1)
+                    {
+                        //多个二手的情况下让用户二次确认
+                        if(DialogResult.Yes  == MessageBox.Show("您的订单中存在多本相同信息的二手书，请确认是否已经选择了对应的唯一编码","二次确认",MessageBoxButtons.YesNo))
+                        {
+                            dr = g_dt_o.Select(string.Format("name = '{0}' AND press = '{1}' AND price = '{2}' AND id = '{3}'",
+                                dataGridView1.Rows[index].Cells[0].Value.ToString(),
+                                dataGridView1.Rows[index].Cells[1].Value.ToString(),
+                                dataGridView1.Rows[index].Cells[2].Value.ToString(),
+                                comboBox1.SelectedItem.ToString()));
+                            if (dr.Length != 1)
+                            {
+                                MessageBox.Show("选择的ID和图书信息不对应，请仔细确认信息");
+                            }
+                            else 
+                            {
+                                g_dt_o.Rows.Remove(dr[0]);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("删除图书时出现系统异常，数组个数：" + dr.Length.ToString());
+                        return;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("零售出库时无法判断图书类别");
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("尚未选择要修改的交易信息！" + ex.Message);
+                return;
+            }
+            finally
+            {
+                BindingDataTable();
+                CalcTotalPrice();
+            }
+        }
     }
 }

@@ -164,7 +164,6 @@ namespace 悠歌网络合作商家管理系统
             {
                 MessageBox.Show("打开新窗体失败！" + ex.Message);
             }
-
         }
 
         private void textBox3_KeyPress(object sender, KeyPressEventArgs e)
@@ -306,6 +305,11 @@ namespace 悠歌网络合作商家管理系统
         public static void ChangeCountAndOff(string bookid,string newcount,string newoff)
         {
             
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -5,5 +5,8 @@
     <Setting Name="username" Type="System.String" Scope="User">
       <Value Profile="(Default)">undefine</Value>
     </Setting>
+    <Setting Name="sellerid" Type="System.String" Scope="User">
+      <Value Profile="(Default)">546ef619959e76a9178b456b</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

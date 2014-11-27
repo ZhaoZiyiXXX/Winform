@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using YouGe;
+using System.Threading;
 
 namespace 淘淘管理系统.book
 {
@@ -28,42 +29,6 @@ namespace 淘淘管理系统.book
             InitializeComponent();
             DisplayAll(2);
 
-        }
-
-        void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
-        {
-            IDictionary<string, string> parameters = (IDictionary<string, string>)e;
-            string localsellinfoid ;
-            if (!parameters.TryGetValue("sellinfoid", out localsellinfoid))
-            {
-                throw new Exception("sellinfoid is null!");
-            }
-            parameters.Remove("sellinfoid");
-            string sellinfoid;
-            if (ygw.InsertNewSellInfo(parameters, out sellinfoid))
-            {
-                string[] ret = {
-                               localsellinfoid,
-                               sellinfoid
-                               };
-                e.Result = ret;
-            }
-            else
-            {
-                MyOperation.DebugPrint("Insert Error!",3);
-                throw new Exception("Insert Error!");
-            }
-        }
-
-        void backgroundWorker1_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
-        {
-            if (e.Error != null)
-            {
-                //更新sellinfoid到本地数据表
-                string[] ret = (string[])e.Result;
-                string sql = string.Format("UPDATE tt_sellinfo SET mallid = '{0}' WHERE sellinfoid = '{1}' ",ret[1],ret[0]);
-                dbo.AddDelUpdate(sql);
-            }
         }
 
         //搜索书主信息按钮
@@ -391,24 +356,88 @@ namespace 淘淘管理系统.book
             if (1 == dbo.AddDelUpdate(sql))
             {
                 MyOperation.MessageShow("添加成功");
-                tb_sellinfoid.Text = tb_price.Text = "";
-                tb_isbn.Focus();
+                
             }
             else
             {
                 MyOperation.MessageShow("添加失败");
                 MyOperation.DebugPrint("添加交易信息时发生错误", 3);
+                return;
             }
+
             //开始同步新的出售信息到喵校园主库
-            backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            backgroundWorker1.RunWorkerCompleted += backgroundWorker1_RunWorkerCompleted;
-            backgroundWorker1.DoWork += backgroundWorker1_DoWork;
-            IDictionary<string, string> parameters = new Dictionary<string, string>();
-            parameters.Add("book_id",dt.Rows[0]["gbookid"].ToString());
-            parameters.Add("seller_id",tb_sellerid.Text);
-            parameters.Add("price", tb_price.Text);
-            parameters.Add("sellinfoid", tb_sellinfoid.Text);
-            backgroundWorker1.RunWorkerAsync(parameters);
+            ThreadWithState tws = new ThreadWithState(
+                dt.Rows[0]["gbookid"].ToString(),
+                tb_price.Text,
+                dt.Rows[0]["id"].ToString()
+            );
+
+            Thread t = new Thread(new ThreadStart(tws.ThreadProc));
+            t.IsBackground = true;
+            t.Start();
+            //原来在添加成功的分支中，现在移到线程建立完毕
+            tb_sellinfoid.Text = tb_price.Text = "";
+            tb_isbn.Focus();
+        }
+
+        public class ThreadWithState
+        {
+            private string _book_id;//喵校园全局ID
+            private string _price;//售价
+            private string _local_book_id;//淘淘本地图书ID
+
+            public ThreadWithState(string book_id, string price,string local_book_id)
+            {
+                _local_book_id = local_book_id;
+                _book_id = book_id;
+                _price = price;
+            }
+
+            public void ThreadProc()
+            {
+                DBOperation dbo = new DBOperation();
+                YouGeWebApi ygw = new YouGeWebApi();
+                if (string.IsNullOrEmpty(_book_id))
+                {
+                    throw new Exception("book_id is null!");
+                }
+                if (string.IsNullOrEmpty(_price))
+                {
+                    throw new Exception("price is null!");
+                }
+                //判断本地是否有相同book_id和price的交易记录，如果有就全部同步成一个mallid,不要再上报给喵校园主库
+                string sql = string.Format("SELECT tt_bookinfo.id,tt_sellinfo.mallid FROM tt_bookinfo ,tt_sellinfo WHERE tt_bookinfo.id " +
+                    "= tt_sellinfo.bookid AND tt_bookinfo.gbookid ='{0}' AND ABS(tt_sellinfo.price- {1}) < 1e-5  AND tt_sellinfo.mallid IS NOT NULL",
+                    _book_id, _price);
+                DataTable dt = dbo.Selectinfo(sql);
+                //如果有，则直接全部更新一次mallid，不用上报给喵校园主库
+                if (dt.Rows.Count > 0)
+                {
+                    sql = string.Format("UPDATE tt_sellinfo SET mallid = '{0}' WHERE bookid = '{1}' AND ABS(price- {2}) < 1e-5", 
+                        dt.Rows[0]["mallid"].ToString(), dt.Rows[0]["id"].ToString(), _price);
+                    dbo.AddDelUpdate(sql);
+                    return;
+                }
+                //如果没有，则添加到喵校园主库，返回交易ID后，同步到每一条符合条件的交易中
+                string sellinfoid;//喵校园交易ID
+                IDictionary<string, string> parameters = new Dictionary<string, string>();
+                parameters.Add("book_id", _book_id);
+                parameters.Add("price",_price);
+                parameters.Add("seller_id", Properties.Settings.Default.sellerid);
+                if (ygw.InsertNewSellInfo(parameters, out sellinfoid))
+                {
+                    sql = string.Format("UPDATE tt_sellinfo SET mallid = '{0}' WHERE bookid = '{1}' AND ABS(price- {2}) < 1e-5",
+                        sellinfoid, _local_book_id, _price);
+                    dbo.AddDelUpdate(sql);
+                    MessageBox.Show("执行完成");
+                    return;
+                }
+                else
+                {
+                    MyOperation.DebugPrint("Insert Error!", 3);
+                    throw new Exception("Insert Error!");
+                }
+            }
         }
 
         private void tb_isbn_KeyDown(object sender, KeyEventArgs e)
@@ -569,6 +598,11 @@ namespace 淘淘管理系统.book
                 MyOperation.DebugPrint("新增图书信息button4_Click:出现catch异常:" + ex.Message, 3);
                 MyOperation.MessageShow("新增图书出现异常，请尝试重新搜索ISBN");
             }
+        }
+
+        private void button5_Click(object sender, RoutedEventArgs e)
+        {
+            tb_price.Text = (MyOperation.string2float(lbb_price.Content.ToString()) * 0.3).ToString("0.0");
         }
     }
 }

@@ -37,6 +37,7 @@
     <Content Include="demo\1.html" />
     <Content Include="index.html" />
     <Content Include="src\baiduTemplate.js" />
+    <Content Include="letsgo.html" />
   </ItemGroup>
   <ItemGroup>
     <None Include="demo\2.php" />

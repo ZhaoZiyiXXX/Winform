@@ -35,7 +35,6 @@ namespace 淘淘管理系统
             //导入淘淘原有书主信息的功能
             button4.Visibility = Visibility.Collapsed;
             button4.IsEnabled = false;
-            
         }
 
         private void CheckUserNameSave()
@@ -44,30 +43,6 @@ namespace 淘淘管理系统
             {
                 tb_user.Text = Properties.Settings.Default.username;
                 checkBox1.IsChecked = true;
-            }
-        }
-
-        private void CheckVersion()
-        {
-            string sql = "select value from tt_keyword where `key` = 'version'";
-            DataTable dt = dbo.Selectinfo(sql);
-            if (dt.Rows.Count != 1)
-            {
-                MyOperation.MessageShow("获取更新信息出错，请检查网络连接!");
-                App.Current.Shutdown();
-            }
-            else
-            {
-                int version = Convert.ToInt32(dt.Rows[0]["value"].ToString());
-                if (version > DBOperation.SoftwareVersion)
-                {
-                    MyOperation.MessageShow("检查到新的软件版本，请更新后使用");
-                    //自动打开下载地址的函数没有调试好
-                    //sql = "select `value` from tt_keyword where `key` = 'addr'";
-                    //DataTable dt2 = dbo.Selectinfo(sql);
-                    //System.Diagnostics.Process.Start(dt.Rows[0]["value"].ToString());
-                    App.Current.Shutdown();
-                }
             }
         }
 
@@ -103,7 +78,6 @@ namespace 淘淘管理系统
                 App.login_staffid = dt.Rows[0]["staffid"].ToString();
                 App.login_username = dt.Rows[0]["name"].ToString();
                 App.login_group = dt.Rows[0]["role"].ToString();
-                CheckVersion();
                 MainWindow mw = new MainWindow();
                 mw.Show();
                 this.Close();
@@ -212,6 +186,12 @@ namespace 淘淘管理系统
                 sql = "UPDATE tt_sellerinfo SET `sellerid` = '"+newsellerid +"' WHERE id = "+dt.Rows[i]["id"].ToString();
                 dbo.AddDelUpdate(sql);
             }
+        }
+
+        private void button5_Click(object sender, RoutedEventArgs e)
+        {
+            离线查询书主信息 w = new 离线查询书主信息();
+            w.Show();
         }
     }
 }

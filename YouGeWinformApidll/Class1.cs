@@ -30,6 +30,33 @@ namespace YouGe
             public string imgpath;
         }
 
+        public bool SoldOldBook(string guid)
+        {
+            DBOperation dbo = new DBOperation();
+            string sql = string.Format("UPDATE yg_oldbookdetail SET status = 1 ,outtime = '{0}' WHERE guid = '{1}'", GetNow(), guid);
+            if (1 == dbo.AddDelUpdate(sql))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }   
+        }
+
+        public bool SoldNewBook(string bookid,int count)
+        {
+            DBOperation dbo = new DBOperation();
+            string sql = string.Format("UPDATE yg_bookstock SET count = count - {0} WHERE bookid = '{1}'",count,bookid);
+            if (1 == dbo.AddDelUpdate(sql))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }           
+        }
         public bool InsertNewBookInfo(Localbookinfo bi, out string id) 
         {
             id = null;
@@ -93,6 +120,21 @@ namespace YouGe
             }
         }
 
+        public string GetLocalShopId()
+        {
+            DBOperation dbo = new DBOperation();
+            string sql = "SELECT * FROM yg_local_shopinfo";
+            DataTable dt = dbo.Selectinfo(sql);
+            if (dt.Rows.Count == 1)
+            {
+                return dt.Rows[0]["shopid"].ToString();
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public struct OrderDetail
         {
             public string orderid;
@@ -108,7 +150,37 @@ namespace YouGe
             DBOperation dbo = new DBOperation();
             if (1 == dbo.AddDelUpdate(sql))
             {
-                return true;
+                sql = string.Format("SELECT * FROM yg_bookstock WHERE bookid = '{0}'",od.bookid );
+                DataTable dt = dbo.Selectinfo(sql);
+                if (dt.Rows.Count == 0)
+                {
+                    sql = string.Format("INSERT INTO  yg_bookstock  (bookid , count) VALUES ('{0}','{1}')",od.bookid,od.count );
+                    if (1 == dbo.AddDelUpdate(sql))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else if (dt.Rows.Count == 1)
+                {
+                    sql = string.Format("UPDATE  yg_bookstock  SET count  = count + {0} WHERE bookid = '{1}'",od.count ,dt.Rows[0]["bookid"].ToString());
+                    if (1 == dbo.AddDelUpdate(sql))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    this.DebugPrint("出现了两本或更多相同bookid的库存信息");
+                    return false;
+                }
             }
             else
             {

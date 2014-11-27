@@ -8,7 +8,6 @@ namespace 淘淘管理系统
 {
     public class DBOperation
     {
-        public const int SoftwareVersion = 2;//软件版本，每次需要修改
         private const string connectstring = "Database='caida';Data Source='localhost';User Id='root';Password='1234';pooling=false ;charset=utf8";
         //private const string connectstring = "Database='letsgo';Data Source='202.102.86.233';User Id='letsgo';Password='letsgo246810';pooling=false ;charset=utf8";
         /// <summary>

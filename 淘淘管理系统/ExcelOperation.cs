@@ -11,33 +11,82 @@ namespace 淘淘管理系统
 {
     class ExcelOperation
     {
-        public static void dataTableToCsv(DataTable table, string file)
+        public static DataTable  CsvToDataTable(string filepath)
+        {
+            string pCsvPath = filepath;//文件路径
+            DataTable table = new DataTable();
+            try
+            {
+                String line;
+                String[] split = null;
+                DataRow row = null;
+                StreamReader sr = new StreamReader(pCsvPath, System.Text.Encoding.Default);
+                //创建与数据源对应的数据列 
+                line = sr.ReadLine();
+                split = line.Split(',');
+                foreach (String colname in split)
+                {
+                    table.Columns.Add(colname, System.Type.GetType("System.String"));
+                }
+                //将数据填入数据表 
+                int j = 0;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    j = 0;
+                    row = table.NewRow();
+                    split = line.Split(',');
+                    foreach (String colname in split)
+                    {
+                        row[j] = colname;
+                        j++;
+                    }
+                    table.Rows.Add(row);
+                }
+                sr.Close();
+            }
+            catch (Exception ex)
+            {
+                MyOperation.DebugPrint(ex.Message);
+                MyOperation.MessageShow(ex.Message);
+            }
+            finally
+            {
+                GC.Collect();
+            }
+            return table;
+        }
+        public static void dataTableToCsv(DataTable table, string file,bool open = true)
         {
             string title = "";
+            char t = ',';
+            char n = '\n';
             FileStream fs = new FileStream(file, FileMode.OpenOrCreate);
             StreamWriter sw = new StreamWriter(new BufferedStream(fs), System.Text.Encoding.Default);
             for (int i = 0; i < table.Columns.Count; i++)
             {
-                title += table.Columns[i].ColumnName + "\t"; //栏位：自动跳到下一单元格
+                title += table.Columns[i].ColumnName + t; //栏位：自动跳到下一单元格
             }
-            title = title.Substring(0, title.Length - 1) + "\n";
+            title = title.Substring(0, title.Length - 1) + n;
             sw.Write(title);
             foreach (DataRow row in table.Rows)
             {
                 string line = "";
                 for (int i = 0; i < table.Columns.Count; i++)
                 {
-                    line += row[i].ToString().Trim() + "\t"; //内容：自动跳到下一单元格
+                    line += row[i].ToString().Trim() + t; //内容：自动跳到下一单元格
                 }
-                line = line.Substring(0, line.Length - 1) + "\n";
+                line = line.Substring(0, line.Length - 1) + n;
                 sw.Write(line);
             }
             sw.Close();
             fs.Close();
-            System.Diagnostics.Process.Start(file);  //打开excel文件
+            if (open)
+            {
+                System.Diagnostics.Process.Start(file);  //打开excel文件
+            }
         }
 
-        public static void SendToExcel(DataTable Table, String SheetName = "undefine")
+        public static void SendToExcel(DataTable Table, String SheetName = "undefine", bool Visible = true,bool close = false )
         {
             MyExcel.Application app = new MyExcel.Application();
             try
@@ -60,7 +109,12 @@ namespace 淘淘管理系统
                         osheet.Cells[r+1,c] = Convert.ToString(Table.Rows[r - 1][c - 1].ToString());
                     }
                 }
-                app.Visible = true;
+                if (close)
+                {
+                    obook.Save();
+                    obook.Close(false, null, null);
+                    app.Quit();
+                }
             }
             catch (Exception ex)
             {
@@ -69,8 +123,7 @@ namespace 淘淘管理系统
             }
             finally
             {
-                //留给用户选择是否关闭
-                //app.Quit();
+                app.Visible = Visible;
                 app = null;
             }
         }
