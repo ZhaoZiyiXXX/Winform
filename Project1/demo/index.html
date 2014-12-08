@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>喵校园项目进度看板</title>
+
+    <!-- Bootstrap -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="../js/bootstrap.min.js"></script>
+    <style>
+.detail{
+	font-size:0.7em;
+	line-height:0.7em;
+	margin-left:15px;
+}
+</style>
+</head>
+<script type="text/javascript">
+
+$(document).ready(function(){
+
+	$.ajax({  
+		type:"GET",
+        url:"http://1.mallschoolwx.sinaapp.com/outjson/progress.php",  
+        dataType:'jsonp',  
+        jsonp:'callback',  
+        jsonpCallback:"jsonpCallback",
+        success:function(result) {  
+        	var html = "";
+        	for(var i =0;i< result.data.length;i++){
+        		html = html +'<h3>'+result.data[i].title+'<button class="btn btn-default detail"  data-toggle="modal" data-target="#myModal'+result.data[i].id+'">项目详情</button></h3>'+
+        		'<div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="width: '+result.data[i].progress+'%;">'+
+        		+result.data[i].progress+'%</div></div><!-- Modal --><div class="modal fade" id="myModal'+result.data[i].id+'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" '+
+        		'aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal">'+
+        		'<span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button></div><div class="modal-body">';
+        		for(var j=0;j<result.data[i].detail.length;j++){
+        			html = html + '<p><span class="label label-primary">TR'+result.data[i].detail[j].tr +'</span></p><p>'+result.data[i].detail[j].describe +'</p>';
+        		}
+        		html = html +'</div><div class="modal-footer"></div></div></div></div>';
+        	}
+        	$('#result').html(html);
+        },  
+        timeout:3000  
+    });  
+});
+</script>
+<body>
+  <div class="container-fluid">
+  <!-- 页头 -->
+  <div class="row" id="header">
+      <div class="jumbotron">
+        <h1>喵校园项目进度看板</h1>
+      </div>
+  </div>
+  <!-- 页头结束 -->
+  <div class="row-fluid">
+  <div id ="result" class="col-md-11">
+  </div>
+	</div>
+  </div>
+</body>
+</html>

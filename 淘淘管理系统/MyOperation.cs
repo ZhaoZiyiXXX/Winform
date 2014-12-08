@@ -16,7 +16,8 @@ namespace 淘淘管理系统
         public static void DebugPrint(string logtext,int flag = 0)
         {
             string head = "";
-            if (File.Exists("debug.config"))
+            //if (File.Exists("debug.config"))
+            if (true)//调试初期默认打开log开关
             {
                 switch (flag)
                 {

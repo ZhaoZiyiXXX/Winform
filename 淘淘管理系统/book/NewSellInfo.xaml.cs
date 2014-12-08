@@ -20,7 +20,6 @@ namespace 淘淘管理系统.book
     /// </summary>
     public partial class NewSellInfo : UserControl
     {
-        System.ComponentModel.BackgroundWorker backgroundWorker1;
         DBOperation dbo = new DBOperation();
         MyOperation mo = new MyOperation();
         YouGeWebApi ygw = new YouGeWebApi();

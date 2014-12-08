@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using YouGe;
+using System.Threading;
 
 namespace 悠歌网络合作商家管理系统
 {
@@ -48,7 +49,7 @@ namespace 悠歌网络合作商家管理系统
                 label4.Text = "书名：" + dataGridView1.Rows[index].Cells[1].Value.ToString() +
                     "\n\n出版社：" + dataGridView1.Rows[index].Cells[3].Value.ToString() +
                     "\n\n定价：" + dataGridView1.Rows[index].Cells[4].Value.ToString();
-                textBox3.Text = (Convert.ToDouble(dataGridView1.Rows[index].Cells[4].Value.ToString()) * 0.45).ToString();
+                textBox3.Text = (Convert.ToDouble(dataGridView1.Rows[index].Cells[4].Value.ToString()) * 0.5).ToString();
             }
             catch
             {
@@ -58,27 +59,39 @@ namespace 悠歌网络合作商家管理系统
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(textBox2.Text))
+            try
             {
-                MessageBox.Show("唯一编码不能为空");
-                return;
-            }
-            int index = dataGridView1.CurrentRow.Index; //获取选中行的行号
-            if (ygw.InsertOldBookInfo(dataGridView1.Rows[index].Cells[0].Value.ToString(), textBox2.Text))
-            {
-                MessageBox.Show("添加成功");
-                textBox2.Text = "";
-            }
-            else
-            {
-                MessageBox.Show("添加失败");
-                return;
-            }
+                if (string.IsNullOrEmpty(textBox2.Text))
+                {
+                    MessageBox.Show("唯一编码不能为空");
+                    return;
+                }
+                int index = dataGridView1.CurrentRow.Index; //获取选中行的行号
+                if (ygw.InsertOldBookInfo(dataGridView1.Rows[index].Cells[0].Value.ToString(), textBox2.Text, textBox3.Text))
+                {
+                    MessageBox.Show("添加成功");
+                    textBox2.Text = "";
+                }
+                else
+                {
+                    MessageBox.Show("添加失败");
+                    return;
+                }
 
-            IDictionary<string, string> parameters = new Dictionary<string, string>();
-            parameters.Add("sellinfoid", textBox2.Text);
-            parameters.Add("price", textBox3.Text);
-            backgroundWorker1.RunWorkerAsync(parameters);
+                //开始同步新的出售信息到喵校园主库
+                ThreadWithState tws = new ThreadWithState(
+                    textBox3.Text,
+                    dataGridView1.Rows[index].Cells[0].Value.ToString()
+                );
+
+                Thread t = new Thread(new ThreadStart(tws.ThreadProc));
+                t.IsBackground = true;
+                t.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("请选择有效的行数！Msg="+ ex.Message);
+            }
         }
 
         public class ThreadWithState
@@ -88,8 +101,8 @@ namespace 悠歌网络合作商家管理系统
 
             public ThreadWithState(string price,string local_book_id)
             {
-                _local_book_id = local_book_id;
                 _price = price;
+                _local_book_id = local_book_id;
             }
 
             public void ThreadProc()
@@ -101,17 +114,22 @@ namespace 悠歌网络合作商家管理系统
                 {
                     throw new Exception("local_book_id is null!");
                 }
-                逻辑待梳理
-                string sql = string.Format("SELECT s.gbookid,s.lbookid FROM oldbooksellinfo AS s WHERE s.lbookid = '{0}'AND s.mallid IS NOT NULL ",
-                    _local_book_id);
+                string sql = string.Format("SELECT b.gbookid,b.id,o.mallid FROM yg_oldbookdetail AS o ,yg_bookinfo AS b "+
+                    " WHERE o.bookid = b.id AND o.bookid = '{0}' AND ABS(o.price-{1}) < 1e-5 AND "+
+                    "o.mallid IS NOT NULL",_local_book_id,_price );
                 DataTable dt = dbo.Selectinfo(sql);
                 if (dt.Rows.Count > 0)
                 {
-                    //说明已经有相同图书ID的交易信息，直接把mallid同步过来
-                    MyOperation.DebugPrint("_sellinfoid is Error!", 3);
-                    throw new Exception("_sellinfoid is Error!");
+                    //说明已经有相同图书ID以及价格的交易信息，直接把mallid同步过来
+                    sql = string.Format("UPDATE yg_oldbookdetail SET mallid = '{0}' WHERE bookid = '{1}'  AND ABS(price- {2}) < 1e-5 ", dt.Rows[0]["mallid"].ToString(), _local_book_id,_price);
+                    dbo.AddDelUpdate(sql);
+                    MyOperation.DebugPrint("本地已经有相同交易信息");
+                    return;
                 }
-                sql = string.Format("");
+                sql = string.Format("SELECT b.gbookid,b.id,o.mallid FROM yg_oldbookdetail AS o ,yg_bookinfo AS b " +
+                    " WHERE o.bookid = b.id AND o.bookid = '{0}' AND ABS(o.price-{1}) < 1e-5", _local_book_id, _price);
+                dt = dbo.Selectinfo(sql);
+                //如果没有，则添加到喵校园主库，返回交易ID后，同步到每一条符合条件的交易中
                 IDictionary<string, string> parameters = new Dictionary<string, string>();
                 parameters.Add("book_id", dt.Rows[0]["gbookid"].ToString());
                 parameters.Add("seller_id", ygw.GetLocalShopId());
@@ -119,7 +137,7 @@ namespace 悠歌网络合作商家管理系统
                 string gsellinfoid;//喵校园交易ID
                 if (yg.InsertNewSellInfo(parameters, out gsellinfoid))
                 {
-                    sql = string.Format("UPDATE yg_oldbookdetail SET mallid = '{0}' WHERE guid = '{1}' ", gsellinfoid, _sellinfoid);
+                    sql = string.Format("UPDATE yg_oldbookdetail SET mallid = '{0}' WHERE bookid = '{1}'  AND ABS(price- {2}) < 1e-5 ", gsellinfoid, _local_book_id, _price);
                     dbo.AddDelUpdate(sql);
                 }
                 else

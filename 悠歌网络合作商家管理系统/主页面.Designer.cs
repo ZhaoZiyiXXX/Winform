@@ -138,6 +138,7 @@
             // 
             // button4
             // 
+            this.button4.Enabled = false;
             this.button4.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             this.button4.FlatAppearance.BorderSize = 2;
             this.button4.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Blue;
@@ -150,6 +151,7 @@
             this.button4.TabIndex = 11;
             this.button4.Text = "修改折扣";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // button3
             // 
@@ -169,6 +171,7 @@
             // 
             // button6
             // 
+            this.button6.Enabled = false;
             this.button6.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             this.button6.FlatAppearance.BorderSize = 2;
             this.button6.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Blue;
@@ -181,6 +184,7 @@
             this.button6.TabIndex = 8;
             this.button6.Text = "新书批量出库";
             this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // groupBox4
             // 
@@ -198,6 +202,7 @@
             // 
             // button10
             // 
+            this.button10.Enabled = false;
             this.button10.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             this.button10.FlatAppearance.BorderSize = 2;
             this.button10.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Blue;
@@ -210,9 +215,11 @@
             this.button10.TabIndex = 13;
             this.button10.Text = "渠道管理";
             this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.button10_Click);
             // 
             // button7
             // 
+            this.button7.Enabled = false;
             this.button7.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             this.button7.FlatAppearance.BorderSize = 2;
             this.button7.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Blue;
@@ -228,6 +235,7 @@
             // 
             // button9
             // 
+            this.button9.Enabled = false;
             this.button9.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             this.button9.FlatAppearance.BorderSize = 2;
             this.button9.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Blue;
@@ -240,9 +248,11 @@
             this.button9.TabIndex = 11;
             this.button9.Text = "查询入库记录";
             this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
             // 
             // button8
             // 
+            this.button8.Enabled = false;
             this.button8.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             this.button8.FlatAppearance.BorderSize = 2;
             this.button8.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Blue;

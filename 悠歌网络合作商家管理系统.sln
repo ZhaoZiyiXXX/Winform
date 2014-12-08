@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "悠歌网络合作商家管理系统", "悠歌网络合作商家管理系统\悠歌网络合作商家管理系统.csproj", "{6B845FC9-F223-4785-89D5-B68619BCDB6E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouGeShopManageSystem", "悠歌网络合作商家管理系统\YouGeShopManageSystem.csproj", "{6B845FC9-F223-4785-89D5-B68619BCDB6E}"
 	ProjectSection(ProjectDependencies) = postProject
 		{57569FBC-B1EF-4696-A36B-D22F35152FFF} = {57569FBC-B1EF-4696-A36B-D22F35152FFF}
 		{60B3AEC9-16B0-42A5-BC54-CE3417A3EFF7} = {60B3AEC9-16B0-42A5-BC54-CE3417A3EFF7}

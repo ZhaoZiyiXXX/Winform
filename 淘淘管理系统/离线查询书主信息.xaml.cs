@@ -38,7 +38,7 @@ namespace 淘淘管理系统
             DataTable newdt = new DataTable();
             newdt = dt.Clone(); // 克隆dt 的结构，包括所有 dt 架构和约束,并无数据； 
             DataRow[] rows = dt.Select(string.Format("name LIKE '%{0}%' OR sellerid = '{1}'", textBox1.Text, textBox1.Text)); // 从dt 中查询符合条件的记录； 
-            foreach (DataRow row in rows)  // 将查询的结果添加到dt中； 
+            foreach (DataRow row in rows)  // 将查询的结果添加到newdt中； 
             {
                 newdt.Rows.Add(row.ItemArray);
             }
@@ -56,7 +56,7 @@ namespace 淘淘管理系统
             DataTable newdt = new DataTable();
             newdt = dt.Clone(); // 克隆dt 的结构，包括所有 dt 架构和约束,并无数据； 
             DataRow[] rows = dt.Select(string.Format("phone LIKE '%{0}%'", textBox1.Text)); // 从dt 中查询符合条件的记录； 
-            foreach (DataRow row in rows)  // 将查询的结果添加到dt中； 
+            foreach (DataRow row in rows)  // 将查询的结果添加到newdt中； 
             {
                 newdt.Rows.Add(row.ItemArray);
             }

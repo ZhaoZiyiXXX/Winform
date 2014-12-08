@@ -40,17 +40,17 @@ namespace 悠歌网络合作商家管理系统
             }
             else
             {
-                progressBar1.Value = 40;
+                progressBar1.Value = 30;
                 YouGeWinformApi.Shopinfo si = new YouGeWinformApi.Shopinfo();
                 //初始化必须参数赋值
                 si.shopId = Shopinfo["data"]["id"].ToString();
                 si.shopRealname = Shopinfo["data"]["realname"].ToString();
                 if (ygw.InitDatabase(si))
                 {
+                    MyOperation.DebugPrint("激活成功，创建数据表完成");
                     this.Hide();
                     主页面 formmain = new 主页面();
                     formmain.Show();
-                    this.Dispose();
                 }
                 else
                 {

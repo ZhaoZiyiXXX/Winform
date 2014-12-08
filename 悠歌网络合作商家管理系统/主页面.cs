@@ -47,5 +47,26 @@ namespace 悠歌网络合作商家管理系统
             零售出库 f = new 零售出库();
             f.Show();
         }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            查询入库记录 f = new 查询入库记录();
+            f.Show();
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

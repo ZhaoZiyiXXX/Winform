@@ -34,14 +34,34 @@ namespace 淘淘管理系统.book
             try
             {
                 string sellinfoid = e.ToString();
-                string sql = string.Format("SELECT mallid FROM tt_sellinfo WHERE sellinfoid = '{0}'", sellinfoid);
+                //需要先判断本地是否还有尚未出售的交易
+                string sql = string.Format("SELECT bookid,price, mallid FROM tt_sellinfo WHERE sellinfoid = '{0}'", sellinfoid);
                 DataTable dt = dbo.Selectinfo(sql);
-                if (dt.Rows.Count == 1 && !string.IsNullOrEmpty(dt.Rows[0]["mallid"].ToString()))
+                if(dt.Rows.Count != 1){
+                    //不等于1说明传进来的sellinfoid就有问题，直接异常
+                    MyOperation.DebugPrint("出售图书时，传入的sellinfoid异常：" + sellinfoid, 3);
+                    return;
+                }
+                string mallid = dt.Rows[0]["mallid"].ToString();
+                sql = string.Format("SELECT mallid FROM tt_sellinfo WHERE issold = '0' AND mallid IS NOT NULL AND bookid = '{0}' AND price = '{1}'",
+                    dt.Rows[0]["bookid"].ToString(), dt.Rows[0]["price"].ToString());
+                dt = dbo.Selectinfo(sql);
+                //如果有就不需要上报给喵校园,不需要任何处理，直接返回
+                if (dt.Rows.Count > 0)
+                {
+                    return;
+                }
+                //如果没有就上报给喵校园主库
+                else if (!string.IsNullOrEmpty(mallid))
                 {
                     IDictionary<string, string> parameters = new Dictionary<string, string>();
                     parameters.Add("status", "1");
-                    parameters.Add("id", dt.Rows[0]["mallid"].ToString());
+                    parameters.Add("id", mallid);
                     ygw.InsertNewSellInfo(parameters, out sellinfoid);
+                }
+                else
+                {
+                    MyOperation.DebugPrint("存在尚未出售但是没有mallid的交易信息：" + sellinfoid, 3);
                 }
             }
             catch(Exception ex)

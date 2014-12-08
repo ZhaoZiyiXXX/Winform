@@ -73,7 +73,7 @@ namespace 悠歌网络合作商家管理系统
             comboBox1.DisplayMember = "name";
             comboBox1.ValueMember = "id";
             comboBox1.DataSource = dt;
-            comboBox1.SelectedIndex = 0;
+            comboBox1.SelectedIndex = -1;
         }
 
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)

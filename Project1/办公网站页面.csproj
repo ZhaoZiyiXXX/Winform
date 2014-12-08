@@ -35,6 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="demo\1.html" />
+    <Content Include="demo\index.html" />
     <Content Include="index.html" />
     <Content Include="src\baiduTemplate.js" />
     <Content Include="letsgo.html" />
